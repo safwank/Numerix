@@ -1,0 +1,2 @@
+defmodule Statix do
+end
