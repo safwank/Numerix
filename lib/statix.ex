@@ -1,2 +1,0 @@
-defmodule Statix do
-end
