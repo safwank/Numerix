@@ -1,5 +1,6 @@
-defmodule Statix.Distance do
+defmodule Numerix.Correlation do
 
+  # Calculates the Pearson correlation coefficient between two vectors.
   def pearson([], _), do: 0
   def pearson(_, []), do: 0
   def pearson(vector1, vector2) do
@@ -9,27 +10,20 @@ defmodule Statix.Distance do
     sum_of_squares1 = vector1 |> square |> Enum.sum
     sum_of_squares2 = vector2 |> square |> Enum.sum
 
-    sum_of_products = fn x, y -> x * y end
-                      |> :lists.zipwith(vector1, vector2)
-                      |> Enum.sum
+    sum_of_products = Enum.sum(:lists.zipwith(fn x, y -> x * y end, vector1, vector2))
 
     size = length(vector1)
     num = sum_of_products - (sum1 * sum2 / size)
-    density = den(sum_of_squares1, sum1, size) * den(sum_of_squares2, sum2, size)
-              |> :math.sqrt
+    density = :math.sqrt((sum_of_squares1 - :math.pow(sum1, 2) / size) * (sum_of_squares2 - :math.pow(sum2, 2) / size))
 
     case density do
       0.0 -> 0.0
-      _   -> 1 - num / density
+      _   -> num / density
     end
   end
 
   defp square(vector) do
     vector |> Enum.map(&:math.pow(&1, 2))
-  end
-
-  defp den(a, b, size) do
-    a - :math.pow(b, 2) / size
   end
 
 end
