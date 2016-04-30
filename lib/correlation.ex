@@ -10,7 +10,10 @@ defmodule Numerix.Correlation do
     sum_of_squares1 = vector1 |> square |> Enum.sum
     sum_of_squares2 = vector2 |> square |> Enum.sum
 
-    sum_of_products = Enum.sum(:lists.zipwith(fn x, y -> x * y end, vector1, vector2))
+    sum_of_products = vector1
+                      |> Stream.zip(vector2)
+                      |> Stream.map(fn {x, y} -> x * y end)
+                      |> Enum.sum
 
     size = length(vector1)
     num = sum_of_products - (sum1 * sum2 / size)

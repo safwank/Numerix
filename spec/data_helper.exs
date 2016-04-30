@@ -11,7 +11,8 @@ defmodule DataHelper do
 
   defp parse_data(lines) do
     lines
-    |> Stream.map(fn line -> line |> String.strip |> Float.parse end)
+    |> Stream.map(&String.strip/1)
+    |> Stream.map(&Float.parse/1)
     |> Stream.filter(fn x -> x != :error end)
     |> Stream.map(&elem(&1, 0))
   end
