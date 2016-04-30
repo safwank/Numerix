@@ -1,6 +1,6 @@
 defmodule Numerix.Correlation do
 
-  # Calculates the Pearson correlation coefficient between two vectors.
+  @doc "Calculates the Pearson correlation coefficient between two vectors."
   def pearson([], _), do: 0
   def pearson(_, []), do: 0
   def pearson(vector1, vector2) do
