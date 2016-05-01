@@ -1,8 +1,8 @@
 defmodule Numerix.Correlation do
 
   @doc "Calculates the Pearson correlation coefficient between two vectors."
-  def pearson([], _), do: 0
-  def pearson(_, []), do: 0
+  def pearson([], _), do: :error
+  def pearson(_, []), do: :error
   def pearson(vector1, vector2) do
     sum1 = vector1 |> Enum.sum
     sum2 = vector2 |> Enum.sum

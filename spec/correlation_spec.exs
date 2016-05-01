@@ -1,5 +1,5 @@
 defmodule Numerix.CorrelationSpec do
-  use ESpec
+  use ESpec, async: true
 
   describe "pearson/2" do
 
@@ -9,14 +9,14 @@ defmodule Numerix.CorrelationSpec do
       let :vector1, do: []
       let :vector2, do: [1, 2, 3]
 
-      it do: should eq 0
+      it do: should eq :error
     end
 
     context "when the second vector is empty" do
       let :vector1, do: [1, 2, 3]
       let :vector2, do: []
 
-      it do: should eq 0
+      it do: should eq :error
     end
 
     context "when the vectors are equal" do
