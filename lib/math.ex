@@ -6,7 +6,7 @@ defmodule Numerix.Math do
   @doc """
   Calculates the nth root of a number.
   """
-  @spec nth_root(float, integer, float) :: float
+  @spec nth_root(number, integer, float) :: float
   def nth_root(x, n, precision \\ 1.0e-5)
   def nth_root(0.0, _n, _precision), do: 0.0
   def nth_root(_x, 0, _precision), do: 0.0
