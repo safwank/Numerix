@@ -1,10 +1,20 @@
 defmodule Numerix.Distance do
   alias Numerix.Correlation
 
+  @typedoc "Something that may be a float."
+  @type maybe_float :: float | :error
+
   @doc "Calculates the Pearson's distance between two vectors."
-  def pearson(vector1, vector2), do: 1.0 - Correlation.pearson(vector1, vector2)
+  @spec pearson([number], [number]) :: maybe_float
+  def pearson(vector1, vector2) do
+    case Correlation.pearson(vector1, vector2) do
+      :error -> :error
+      correlation -> 1.0 - correlation
+    end
+  end
 
   @doc "Calculates the Euclidean distance between two vectors."
+  @spec euclidean([number], [number]) :: maybe_float
   def euclidean(vector1, vector2) do
     distance(vector1, vector2, fn v1, v2 ->
       v1
@@ -16,6 +26,7 @@ defmodule Numerix.Distance do
   end
 
   @doc "Calculates the Manhattan distance between two vectors."
+  @spec manhattan([number], [number]) :: maybe_float
   def manhattan(vector1, vector2) do
     distance(vector1, vector2, fn v1, v2 ->
       v1

@@ -1,6 +1,7 @@
 defmodule Numerix.Correlation do
 
   @doc "Calculates the Pearson correlation coefficient between two vectors."
+  @spec pearson([number], [number]) :: float | :error
   def pearson([], _), do: :error
   def pearson(_, []), do: :error
   def pearson(vector1, vector2) do
