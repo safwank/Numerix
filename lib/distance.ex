@@ -1,10 +1,19 @@
 defmodule Numerix.Distance do
-  alias Numerix.Correlation
+  @moduledoc """
+  Distance functions between two vectors.
+  """
 
-  @typedoc "Something that may be a float."
+  alias Numerix.Correlation
+  alias Numerix.Math
+
+  @typedoc """
+  Something that may be a float.
+  """
   @type maybe_float :: float | :error
 
-  @doc "Calculates the Pearson's distance between two vectors."
+  @doc """
+  Calculates the Pearson's distance between two vectors.
+  """
   @spec pearson([number], [number]) :: maybe_float
   def pearson(vector1, vector2) do
     case Correlation.pearson(vector1, vector2) do
@@ -13,31 +22,35 @@ defmodule Numerix.Distance do
     end
   end
 
-  @doc "Calculates the Euclidean distance between two vectors."
+  @doc """
+  Calculates the Minkowski distance between two vectors.
+  """
+  @spec minkowski([number], [number], integer) :: maybe_float
+  def minkowski(vector1, vector2, lambda \\ 3)
+  def minkowski([], _, _lambda), do: :error
+  def minkowski(_, [], _lambda), do: :error
+  def minkowski(vector1, vector2, lambda) do
+    vector1
+    |> Stream.zip(vector2)
+    |> Stream.map(fn {x, y} -> :math.pow(abs(x - y), lambda) end)
+    |> Enum.sum
+    |> Math.nth_root(lambda)
+  end
+
+  @doc """
+  Calculates the Euclidean distance between two vectors.
+  """
   @spec euclidean([number], [number]) :: maybe_float
   def euclidean(vector1, vector2) do
-    distance(vector1, vector2, fn v1, v2 ->
-      v1
-      |> Stream.zip(v2)
-      |> Stream.map(fn {x, y} -> :math.pow(x - y, 2) end)
-      |> Enum.sum
-      |> :math.sqrt
-    end)
+    minkowski(vector1, vector2, 2)
   end
 
-  @doc "Calculates the Manhattan distance between two vectors."
+  @doc """
+  Calculates the Manhattan distance between two vectors.
+  """
   @spec manhattan([number], [number]) :: maybe_float
   def manhattan(vector1, vector2) do
-    distance(vector1, vector2, fn v1, v2 ->
-      v1
-      |> Stream.zip(v2)
-      |> Stream.map(fn {x, y} -> abs(x - y) end)
-      |> Enum.sum
-    end)
+    minkowski(vector1, vector2, 1)
   end
-
-  defp distance([], _, _fun), do: :error
-  defp distance(_, [], _fun), do: :error
-  defp distance(vector1, vector2, fun), do: fun.(vector1, vector2)
 
 end

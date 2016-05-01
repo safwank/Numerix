@@ -15,7 +15,7 @@ defmodule Numerix.Mixfile do
         commit: :test
       ],
       aliases: [
-        "commit": ["dialyzer", "credo --strict", "espec"]
+        "commit": ["dialyzer", "credo --strict", "test", "espec"]
       ],
       default_task: "commit"
     ]
@@ -28,8 +28,10 @@ defmodule Numerix.Mixfile do
   defp deps do
     [
       {:credo, "~> 0.3.13", only: :test},
+      {:dialyxir, "~> 0.3.3", only: [:dev, :test]},
       {:espec, "~> 0.8.18", only: :test},
-      {:dialyxir, "~> 0.3.3", only: [:dev, :test]}
+      {:excheck, "~> 0.3.3", only: :test},
+      {:triq, github: "krestenkrab/triq", only: :test}
     ]
   end
 end

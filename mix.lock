@@ -2,4 +2,6 @@
   "credo": {:hex, :credo, "0.3.13"},
   "dialyxir": {:hex, :dialyxir, "0.3.3"},
   "espec": {:hex, :espec, "0.8.18"},
-  "meck": {:hex, :meck, "0.8.4"}}
+  "excheck": {:hex, :excheck, "0.3.3"},
+  "meck": {:hex, :meck, "0.8.4"},
+  "triq": {:git, "https://github.com/krestenkrab/triq.git", "c7306b8eaea133d52140cb828817efb5e50a3d52", []}}
