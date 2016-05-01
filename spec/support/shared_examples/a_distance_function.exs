@@ -3,6 +3,13 @@ defmodule ADistanceFunction do
 
   subject shared.distance.(vector1, vector2)
 
+  context "when both vectors are empty" do
+    let :vector1, do: []
+    let :vector2, do: []
+
+    it do: should eq :error
+  end
+
   context "when the first vector is empty" do
     let :vector1, do: []
     let :vector2, do: [1, 2, 3]
