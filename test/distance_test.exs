@@ -10,4 +10,11 @@ defmodule Numerix.DistanceTest do
     end
   end
 
+  property :pearson_distance_is_between_0_and_2 do
+    for_all {xs, ys} in {[number], [number]} do
+      distance = Distance.pearson(xs, ys)
+      distance >= 0 && distance <= 2
+    end
+  end
+
 end
