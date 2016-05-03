@@ -10,7 +10,7 @@ use Mix.Config
 
 # You can configure for your application as:
 #
-#     config :statix, key: :value
+#     config :numerix, key: :value
 #
 # And access this configuration in your application as:
 #
