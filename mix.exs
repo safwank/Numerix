@@ -17,7 +17,7 @@ defmodule Numerix.Mixfile do
         commit: :test
       ],
       aliases: [
-        "commit": ["dialyzer", "credo --strict", "test", "espec"]
+        "commit": ["dialyzer", "credo --strict", "test --trace", "espec --trace"]
       ],
       default_task: "commit"
     ]
