@@ -1,5 +1,5 @@
 defmodule Numerix.CorrelationTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   use ExCheck
   alias Numerix.Correlation
 
