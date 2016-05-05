@@ -6,4 +6,9 @@ defmodule ListHelper do
     length(xs) == length(ys)
   end
 
+  def unique?([]), do: false
+  def unique?(xs) do
+    xs |> Enum.uniq |> length == length(xs)
+  end
+
 end
