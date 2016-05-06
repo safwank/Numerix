@@ -14,29 +14,23 @@ defmodule Numerix.StatisticsTest do
   property :mean_is_between_mix_and_max do
     for_all xs in non_empty(list(number)) do
       mean = Statistics.mean(xs)
-      mean >= Enum.min(xs) && mean <= Enum.max(xs)
+      mean >= Enum.min(xs) and mean <= Enum.max(xs)
     end
   end
 
-  property :median_is_the_middle_value do
-    for_all xs in non_empty(list(pos_integer)) do
-      implies ListHelper.unique?(xs) do
-        median = Statistics.median(xs)
-
-        if length(xs) == 1 do
-          median == List.first(xs)
-        else
-          {first, second} = xs |> Enum.sort |> Enum.split_while(fn x -> x <= median end)
-          (length(first) == length(second)) || (length(first) - 1 == length(second))
-        end
-      end
+  property :median_is_the_middle_value_of_a_sorted_list do
+    for_all xs in non_empty(list(number)) do
+      xs = Enum.uniq(xs)
+      median = Statistics.median(xs)
+      {first, second} = xs |> Enum.sort |> Enum.split_while(fn x -> x <= median end)
+      (length(first) == length(second)) or (length(first) - 1 == length(second))
     end
   end
 
   property :median_is_between_mix_and_max do
     for_all xs in non_empty(list(number)) do
       median = Statistics.median(xs)
-      median >= Enum.min(xs) && median <= Enum.max(xs)
+      median >= Enum.min(xs) and median <= Enum.max(xs)
     end
   end
 
