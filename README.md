@@ -7,7 +7,7 @@ A collection of (potentially) useful mathematical functions. At the moment it ha
 Add `numerix` to your list of dependencies in `mix.exs`:
 
 ```elixir
-    def deps do
-      [{:numerix, "~> 0.0.1"}]
-    end
+  def deps do
+    [{:numerix, "~> 0.0.1"}]
+  end
 ```
