@@ -28,20 +28,17 @@ defmodule Numerix.Statistics do
   @spec mode([number]) :: [number] | nil
   def mode([]), do: nil
   def mode(xs) do
-    if xs |> repeated? do
-      xs
-      |> Enum.reduce(%{}, fn(x, acc) -> acc |> Map.update(x, 1, &(&1 + 1)) end)
-      |> Enum.sort(fn {_val1, count1}, {_val2, count2} -> count1 > count2 end)
-      |> Enum.reduce_while({}, fn({val, count}, acc) ->
-        case acc do
-          {}                      -> {:cont, {count, [val]}}
-          {c, vs} when c == count -> {:cont, {count, [val | vs]}}
-          _                       -> {:halt, acc}
-        end
-      end)
-      |> elem(1)
-    else
-      nil
+    counts = xs |> Enum.reduce(%{}, fn(x, acc) ->
+      acc |> Map.update(x, 1, fn count -> count + 1 end)
+    end)
+
+    {_, max_count} = counts |> Enum.max_by(fn {_x, count} -> count end)
+
+    case max_count do
+      1 -> nil
+      _ -> counts
+           |> Enum.filter_map(fn {_x, count} -> count == max_count end,
+                              fn {x, _count} -> x end)
     end
   end
 
@@ -53,10 +50,6 @@ defmodule Numerix.Statistics do
   def range(xs) do
     {minimum, maximum} = Enum.min_max(xs)
     maximum - minimum
-  end
-
-  defp repeated?(xs) do
-    Enum.uniq(xs) != xs
   end
 
 end
