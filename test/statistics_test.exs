@@ -34,4 +34,25 @@ defmodule Numerix.StatisticsTest do
     end
   end
 
+  property :mode_is_the_most_frequent_value do
+    for_all xs in non_empty(list(number)) do
+      frequent = [6] |> Stream.cycle |> Enum.take(length(xs) + 1)
+      xs = xs |> Enum.concat(frequent) |> Enum.shuffle
+      Statistics.mode(xs) == 6
+    end
+  end
+
+  property :mode_is_nil_if_no_value_is_repeated do
+    for_all xs in non_empty(list(number)) do
+      xs |> Enum.uniq |> Statistics.mode == nil
+    end
+  end
+
+  property :range_is_the_difference_between_the_largest_and_smallest_values do
+    for_all xs in non_empty(list(number)) do
+      sorted_xs = Enum.sort(xs)
+      Statistics.range(xs) == List.last(sorted_xs) - List.first(sorted_xs)
+    end
+  end
+
 end
