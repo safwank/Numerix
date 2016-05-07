@@ -23,19 +23,25 @@ defmodule Numerix.Statistics do
   end
 
   @doc """
-  Calculates the most frequent value in a list.
+  Calculates the most frequent value(s) in a list.
   """
-  @spec mode([number]) :: number | nil
+  @spec mode([number]) :: [number] | nil
   def mode([]), do: nil
   def mode(xs) do
-    most_frequent = xs
-                    |> Enum.sort
-                    |> Enum.chunk_by(&(&1))
-                    |> Enum.max_by(&length/1)
-
-    case length(most_frequent) do
-      1 -> nil
-      _ -> hd(most_frequent)
+    if xs |> repeated? do
+      xs
+      |> Enum.reduce(%{}, fn(x, acc) -> acc |> Map.update(x, 1, &(&1 + 1)) end)
+      |> Enum.sort(fn {_val1, count1}, {_val2, count2} -> count1 > count2 end)
+      |> Enum.reduce_while({}, fn({val, count}, acc) ->
+        case acc do
+          {}                      -> {:cont, {count, [val]}}
+          {c, vs} when c == count -> {:cont, {count, [val | vs]}}
+          _                       -> {:halt, acc}
+        end
+      end)
+      |> elem(1)
+    else
+      nil
     end
   end
 
@@ -47,6 +53,10 @@ defmodule Numerix.Statistics do
   def range(xs) do
     {minimum, maximum} = Enum.min_max(xs)
     maximum - minimum
+  end
+
+  defp repeated?(xs) do
+    Enum.uniq(xs) != xs
   end
 
 end

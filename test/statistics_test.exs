@@ -36,9 +36,22 @@ defmodule Numerix.StatisticsTest do
 
   property :mode_is_the_most_frequent_value do
     for_all xs in non_empty(list(number)) do
-      frequent = [6] |> Stream.cycle |> Enum.take(length(xs) + 1)
-      xs = xs |> Enum.concat(frequent) |> Enum.shuffle
-      Statistics.mode(xs) == 6
+      frequent = [6]
+      frequent_list = frequent |> Stream.cycle |> Enum.take(length(xs) + 1)
+      xs |> Enum.concat(frequent_list) |> Enum.shuffle |> Statistics.mode == frequent
+    end
+  end
+
+  property :mode_is_the_most_frequent_set_of_values do
+    for_all xs in non_empty(list(number)) do
+      frequent = [666, 777]
+      frequent_list = frequent |> Stream.cycle |> Enum.take(2 * (length(xs) + 1))
+      xs
+      |> Enum.reject(&(Enum.member?(frequent, &1)))
+      |> Enum.concat(frequent_list)
+      |> Enum.shuffle
+      |> Statistics.mode
+      |> Enum.sort == frequent
     end
   end
 
