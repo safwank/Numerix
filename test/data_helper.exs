@@ -1,7 +1,7 @@
 defmodule DataHelper do
 
   def read(dataset) do
-    "spec/resources/data/#{dataset}.dat"
+    "test/resources/data/#{dataset}.dat"
     |> File.read!
     |> String.split("\n")
     |> Stream.drop_while(fn line -> line != "Data: Y" end)
