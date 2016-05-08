@@ -61,7 +61,7 @@ defmodule Numerix.StatisticsTest do
   end
 
   property :mode_is_the_most_frequent_set_of_values do
-    for_all {x, y, xs} in such_that({x_, y_, xs_} in {number, number, non_empty(list(number))} when x_ < y_) do
+    for_all {x, y, xs} in such_that({x_, y_, _} in {number, number, non_empty(list(number))} when x_ < y_) do
       frequent = [x, y]
       frequent_list = frequent |> Stream.cycle |> Enum.take(2 * (length(xs) + 1))
       xs
