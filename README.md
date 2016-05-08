@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/safwank/Numerix.svg?branch=master)](https://travis-ci.org/safwank/Numerix)
+
 # Numerix
 
 A collection of (potentially) useful mathematical functions. At the moment it has a number of distance and correlation functions. The plan is to implement other special functions, statistics, probability distributions, maybe even machine learning algorithms.
