@@ -4,4 +4,5 @@ elixir:
 otp_release:
   - 18.0
 script:
-  - "mix do deps.get, commit"
+  - "mix dialyzer.plt"
+  - "mix commit"
