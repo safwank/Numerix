@@ -33,8 +33,8 @@ defmodule Numerix.CorrelationTest do
   end
 
   test :pearson_correlation_is_correct_for_a_specific_dataset do
-    vector1 = DataHelper.read("Lew") |> Enum.take(200)
-    vector2 = DataHelper.read("Lottery") |> Enum.take(200)
+    vector1 = DataHelper.read("Lew") |> Map.get(:data) |> Enum.take(200)
+    vector2 = DataHelper.read("Lottery") |> Map.get(:data) |> Enum.take(200)
 
     assert Correlation.pearson(vector1, vector2) == -0.02947086158072648
   end

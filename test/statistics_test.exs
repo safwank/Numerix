@@ -84,4 +84,18 @@ defmodule Numerix.StatisticsTest do
     end
   end
 
+  property :variance_is_the_square_of_standard_deviation do
+    for_all xs in non_empty(list(int)) do
+      xs |> Statistics.variance |> Float.round(4) == xs |> Statistics.std_dev |> :math.pow(2) |> Float.round(4)
+    end
+  end
+
+  test :std_dev_is_correct_for_specific_datasets do
+    dataset1 = DataHelper.read("Lew")
+    dataset2 = DataHelper.read("Lottery")
+
+    assert_in_delta(dataset1[:data] |> Statistics.std_dev, dataset1[:std_dev], 0.0001)
+    assert_in_delta(dataset2[:data] |> Statistics.std_dev, dataset2[:std_dev], 0.0001)
+  end
+
 end
