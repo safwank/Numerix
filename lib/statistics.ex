@@ -3,6 +3,8 @@ defmodule Numerix.Statistics do
   Common statistical functions.
   """
 
+  alias Numerix.Math
+
   @doc """
   Calculates the average of a list of numbers.
   """
@@ -57,11 +59,12 @@ defmodule Numerix.Statistics do
   """
   @spec variance([number]) :: float
   def variance([]), do: 0.0
-  def variance([x]), do: 0.0
+  def variance([_x]), do: 0.0
   def variance(xs) do
-    avg = mean(xs)
-    sum = xs |> Enum.map(fn x -> :math.pow(x - avg, 2) end) |> Enum.sum
-    sum / (Enum.count(xs) - 1)
+    xs
+    |> Enum.map(fn x -> :math.pow(x - mean(xs), 2) end)
+    |> Enum.sum
+    |> Math.divide(Enum.count(xs) - 1)
   end
 
   @doc """

@@ -15,6 +15,14 @@ defmodule Numerix.Math do
     fixed_point(f, x, precision, f.(x))
   end
 
+  @doc """
+  A convenience function for chaining number division.
+  """
+  @spec divide(number, number) :: float
+  def divide(left, right) do
+    left / right
+  end
+
   defp fixed_point(_, guess, tolerance, next) when abs(guess - next) < tolerance, do: next
   defp fixed_point(f, _, tolerance, next), do: fixed_point(f, next, tolerance, f.(next))
 
