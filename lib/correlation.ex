@@ -26,12 +26,13 @@ defmodule Numerix.Correlation do
 
     size = length(vector1)
     num = sum_of_products - (sum1 * sum2 / size)
-    density = :math.sqrt((sum_of_squares1 - :math.pow(sum1, 2) / size)
+    density = :math.sqrt(
+      (sum_of_squares1 - :math.pow(sum1, 2) / size)
       * (sum_of_squares2 - :math.pow(sum2, 2) / size))
 
     case density do
       0.0 -> 0.0
-      _   -> num / density
+      _ -> num / density
     end
   end
 
@@ -43,9 +44,9 @@ defmodule Numerix.Correlation do
   def pearson(_, [], _), do: :error
   def pearson(_, _, []), do: :error
   def pearson(vector1, vector2, weights) do
-    weighted_covariance_xy = calculate_weighted_covariance(vector1, vector2, weights)
-    weighted_covariance_xx = calculate_weighted_covariance(vector1, vector1, weights)
-    weighted_covariance_yy = calculate_weighted_covariance(vector2, vector2, weights)
+    weighted_covariance_xy = weighted_covariance(vector1, vector2, weights)
+    weighted_covariance_xx = weighted_covariance(vector1, vector1, weights)
+    weighted_covariance_yy = weighted_covariance(vector2, vector2, weights)
 
     weighted_covariance_xy
     |> Math.divide(:math.sqrt(weighted_covariance_xx * weighted_covariance_yy))
@@ -55,22 +56,22 @@ defmodule Numerix.Correlation do
     vector |> Enum.map(&:math.pow(&1, 2))
   end
 
-  defp calculate_weighted_mean(vector, weights) do
-    vector
-    |> Stream.zip(weights)
-    |> Stream.map(fn {x, w} -> x * w end)
-    |> Enum.sum
-    |> Math.divide(weights |> Enum.sum)
-  end
-
-  defp calculate_weighted_covariance(vector1, vector2, weights) do
-    weighted_mean1 = calculate_weighted_mean(vector1, weights)
-    weighted_mean2 = calculate_weighted_mean(vector2, weights)
+  defp weighted_covariance(vector1, vector2, weights) do
+    weighted_mean1 = weighted_mean(vector1, weights)
+    weighted_mean2 = weighted_mean(vector2, weights)
 
     vector1
     |> Stream.zip(vector2)
     |> Stream.zip(weights)
     |> Stream.map(fn {{x, y}, w} -> w * (x - weighted_mean1) * (y - weighted_mean2) end)
+    |> Enum.sum
+    |> Math.divide(weights |> Enum.sum)
+  end
+
+  defp weighted_mean(vector, weights) do
+    vector
+    |> Stream.zip(weights)
+    |> Stream.map(fn {x, w} -> x * w end)
     |> Enum.sum
     |> Math.divide(weights |> Enum.sum)
   end
