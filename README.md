@@ -13,3 +13,7 @@ Add `numerix` to your list of dependencies in `mix.exs`:
     [{:numerix, "~> 0.0.2"}]
   end
 ```
+
+## Examples
+
+Check out the [tests](https://github.com/safwank/Numerix/tree/master/test) for examples.
