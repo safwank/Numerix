@@ -5,6 +5,11 @@ defmodule Numerix.Statistics do
 
   alias Numerix.Math
 
+  @typedoc """
+  Something that may be a float.
+  """
+  @type maybe_float :: float | :error
+
   @doc """
   Calculates the average of a list of numbers.
   """
@@ -57,9 +62,9 @@ defmodule Numerix.Statistics do
   @doc """
   Calculates the variance of a list of numbers.
   """
-  @spec variance([number]) :: float
-  def variance([]), do: 0.0
-  def variance([_x]), do: 0.0
+  @spec variance([number]) :: maybe_float
+  def variance([]), do: :error
+  def variance([_x]), do: :error
   def variance(xs) do
     xs
     |> Enum.map(fn x -> :math.pow(x - mean(xs), 2) end)
@@ -70,9 +75,30 @@ defmodule Numerix.Statistics do
   @doc """
   Calculates the standard deviation of a list of numbers.
   """
-  @spec std_dev([number]) :: float
+  @spec std_dev([number]) :: maybe_float
+  def std_dev([]), do: :error
+  def std_dev([_x]), do: :error
   def std_dev(xs) do
     xs |> variance |> :math.sqrt
+  end
+
+  @doc """
+  Calculates a measure of how much two vectors change together.
+  """
+  @spec covariance([number], [number]) :: maybe_float
+  def covariance([], _), do: :error
+  def covariance(_, []), do: :error
+  def covariance([_x], _), do: :error
+  def covariance(_, [_y]), do: :error
+  def covariance(xs, ys) when length(xs) == length(ys) do
+    mean_x = mean(xs)
+    mean_y = mean(ys)
+
+    xs
+    |> Stream.zip(ys)
+    |> Stream.map(fn {x, y} -> (x - mean_x) * (y - mean_y) end)
+    |> Enum.sum
+    |> Math.divide(length(xs) - 1)
   end
 
 end

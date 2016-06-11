@@ -85,7 +85,7 @@ defmodule Numerix.StatisticsTest do
   end
 
   property :variance_is_the_square_of_standard_deviation do
-    for_all xs in non_empty(list(int)) do
+    for_all xs in such_that(xxs in non_empty(list(number)) when length(xxs) > 1) do
       xs |> Statistics.variance |> Float.round(4) == xs |> Statistics.std_dev |> :math.pow(2) |> Float.round(4)
     end
   end
@@ -96,6 +96,21 @@ defmodule Numerix.StatisticsTest do
 
     assert_in_delta(dataset1[:data] |> Statistics.std_dev, dataset1[:std_dev], 0.0001)
     assert_in_delta(dataset2[:data] |> Statistics.std_dev, dataset2[:std_dev], 0.0001)
+  end
+
+  property :covariance_is_consistent_with_variance do
+    for_all xs in such_that(xxs in non_empty(list(number)) when length(xxs) > 1) do
+      assert_in_delta(Statistics.covariance(xs, xs), Statistics.variance(xs), 0.0000000001)
+    end
+  end
+
+  property :covariance_is_symmetric do
+    for_all {xs, ys} in such_that({xxs, yys} in {non_empty(list(number)), non_empty(list(number))}
+      when length(xxs) > 1 and length(yys) > 1) do
+
+      {xs, ys} = ListHelper.equalize_length(xs, ys)
+      Statistics.covariance(xs, ys) == Statistics.covariance(ys, xs)
+    end
   end
 
 end
