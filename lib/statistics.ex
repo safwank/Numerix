@@ -99,7 +99,6 @@ defmodule Numerix.Statistics do
   """
   @spec population_std_dev([number]) :: maybe_float
   def population_std_dev([]), do: :error
-  def population_std_dev([_x]), do: :error
   def population_std_dev(xs) do
     xs |> population_variance |> :math.sqrt
   end

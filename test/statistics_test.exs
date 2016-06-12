@@ -84,6 +84,14 @@ defmodule Numerix.StatisticsTest do
     end
   end
 
+  test :variance_returns_error_when_list_is_empty do
+    assert Statistics.variance([]) == :error
+  end
+
+  test :variance_returns_error_when_list_has_only_one_element do
+    assert Statistics.variance([42]) == :error
+  end
+
   property :variance_is_the_square_of_standard_deviation do
     for_all xs in such_that(xxs in non_empty(list(number)) when length(xxs) > 1) do
       xs |> Statistics.variance |> Float.round(4) ==
@@ -91,11 +99,23 @@ defmodule Numerix.StatisticsTest do
     end
   end
 
+  test :population_variance_returns_error_when_list_is_empty do
+    assert Statistics.population_variance([]) == :error
+  end
+
   property :population_variance_is_the_square_of_population_standard_deviation do
     for_all xs in such_that(xxs in non_empty(list(number)) when length(xxs) > 1) do
       xs |> Statistics.population_variance |> Float.round(4) ==
         xs |> Statistics.population_std_dev |> :math.pow(2) |> Float.round(4)
     end
+  end
+
+  test :std_dev_returns_error_when_list_is_empty do
+    assert Statistics.std_dev([]) == :error
+  end
+
+  test :std_dev_returns_error_when_list_has_only_one_element do
+    assert Statistics.std_dev([42]) == :error
   end
 
   test :std_dev_is_correct_for_specific_datasets do
@@ -106,15 +126,28 @@ defmodule Numerix.StatisticsTest do
     assert_in_delta(dataset2[:data] |> Statistics.std_dev, dataset2[:std_dev], 0.0001)
   end
 
+  test :population_std_dev_returns_error_when_list_is_empty do
+    assert Statistics.population_std_dev([]) == :error
+  end
+
+  test :covariance_returns_error_when_any_list_is_empty do
+    assert Statistics.covariance([], [1, 2]) == :error
+    assert Statistics.covariance([1, 2], []) == :error
+  end
+
+  test :covariance_returns_error_when_any_list_has_only_one_element do
+    assert Statistics.covariance([1], [2, 3]) == :error
+    assert Statistics.covariance([1, 2], [3]) == :error
+  end
+
+  test :covariance_returns_error_when_the_list_lengths_do_not_match do
+    assert Statistics.covariance([1, 2], [3, 4, 5]) == :error
+    assert Statistics.covariance([1, 2, 3], [4, 5]) == :error
+  end
+
   property :covariance_is_consistent_with_variance do
     for_all xs in such_that(xxs in non_empty(list(number)) when length(xxs) > 1) do
       assert_in_delta(Statistics.covariance(xs, xs), Statistics.variance(xs), 0.0000000001)
-    end
-  end
-
-  property :population_covariance_is_consistent_with_population_variance do
-    for_all xs in such_that(xxs in non_empty(list(number)) when length(xxs) > 1) do
-      assert_in_delta(Statistics.population_covariance(xs, xs), Statistics.population_variance(xs), 0.0000000001)
     end
   end
 
@@ -124,6 +157,22 @@ defmodule Numerix.StatisticsTest do
 
       {xs, ys} = ListHelper.equalize_length(xs, ys)
       Statistics.covariance(xs, ys) == Statistics.covariance(ys, xs)
+    end
+  end
+
+  test :population_covariance_returns_error_when_any_list_is_empty do
+    assert Statistics.population_covariance([], [1, 2]) == :error
+    assert Statistics.population_covariance([1, 2], []) == :error
+  end
+
+  test :population_covariance_returns_error_when_the_list_lengths_do_not_match do
+    assert Statistics.population_covariance([1, 2], [3, 4, 5]) == :error
+    assert Statistics.population_covariance([1, 2, 3], [4, 5]) == :error
+  end
+
+  property :population_covariance_is_consistent_with_population_variance do
+    for_all xs in such_that(xxs in non_empty(list(number)) when length(xxs) > 1) do
+      assert_in_delta(Statistics.population_covariance(xs, xs), Statistics.population_variance(xs), 0.0000000001)
     end
   end
 
