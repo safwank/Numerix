@@ -157,6 +157,18 @@ defmodule Numerix.Statistics do
   end
 
   @doc """
+  Estimates the p-Percentile value from the vector.
+  Approximately median-unbiased irrespective of the sample distribution.
+  This implements the R-8 type of https://en.wikipedia.org/wiki/Quantile.
+  """
+  @spec percentile([number], integer) :: maybe_float
+  def percentile([], _p), do: nil
+  def percentile(_xs, p) when p < 0 or p > 100, do: nil
+  def percentile(xs, p) do
+    quantile(xs, p / 100)
+  end
+
+  @doc """
   Calculates the weighted measure of how much two vectors change together.
   """
   @spec weighted_covariance([number], [number], [number]) :: maybe_float

@@ -195,6 +195,16 @@ defmodule Numerix.StatisticsTest do
     refute Statistics.quantile([1, 2, 3], -1.1)
   end
 
+  property :quantile_is_between_mix_and_max_values do
+    for_all {xs, tau} in {non_empty(list(number)), int(0, 100)} do
+      tau = tau / 100
+      {minimum, maximum} = Enum.min_max(xs)
+
+      quantile = Statistics.quantile(xs, tau)
+      quantile >= minimum and quantile <= maximum
+    end
+  end
+
   test :quantile_is_correct_for_specific_examples do
     xs = [-1, 5, 0, -3, 10, -0.5, 4, 0.2, 1, 6]
 
@@ -203,6 +213,32 @@ defmodule Numerix.StatisticsTest do
     |> Enum.each(fn {tau, expected} ->
       assert_in_delta(Statistics.quantile(xs, tau), expected, 0.0001)
     end)
+  end
+
+  test :percentile_is_nil_when_list_is_empty do
+    refute Statistics.percentile([], 50)
+  end
+
+  test :percentile_is_nil_when_p_is_invalid do
+    refute Statistics.percentile([1, 2, 3], -1)
+    refute Statistics.percentile([1, 2, 3], -101)
+  end
+
+  property :percentile_is_between_mix_and_max_values do
+    for_all {xs, p} in {non_empty(list(number)), int(0, 100)} do
+      {minimum, maximum} = Enum.min_max(xs)
+
+      percentile = Statistics.percentile(xs, p)
+      percentile >= minimum and percentile <= maximum
+    end
+  end
+
+  property :percentile_is_consistent_with_quantile do
+    for_all {xs, p} in {non_empty(list(number)), int(0, 100)} do
+      tau = p / 100
+
+      Statistics.percentile(xs, p) == Statistics.quantile(xs, tau)
+    end
   end
 
   test :weighted_mean_is_nil_when_any_list_is_empty do
