@@ -1,6 +1,6 @@
-%{"bunt": {:hex, :bunt, "0.1.5"},
+%{"bunt": {:hex, :bunt, "0.1.6"},
   "certifi": {:hex, :certifi, "0.4.0"},
-  "credo": {:hex, :credo, "0.3.13"},
+  "credo": {:hex, :credo, "0.4.3"},
   "dialyxir": {:hex, :dialyxir, "0.3.3"},
   "espec": {:hex, :espec, "0.8.18"},
   "excheck": {:hex, :excheck, "0.3.3"},

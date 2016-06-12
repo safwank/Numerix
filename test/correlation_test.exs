@@ -3,10 +3,10 @@ defmodule Numerix.CorrelationTest do
   use ExCheck
   alias Numerix.Correlation
 
-  test :pearson_returns_error_when_any_vector_is_empty do
-    assert Correlation.pearson([],[1]) == :error
-    assert Correlation.pearson([2],[]) == :error
-    assert Correlation.pearson([],[]) == :error
+  test :pearson_is_nil_when_any_vector_is_empty do
+    refute Correlation.pearson([],[1])
+    refute Correlation.pearson([2],[])
+    refute Correlation.pearson([],[])
   end
 
   property :pearson_correlation_is_zero_when_the_vectors_are_equal_but_variance_is_zero do
@@ -37,6 +37,13 @@ defmodule Numerix.CorrelationTest do
     vector2 = DataHelper.read("Lottery") |> Map.get(:data) |> Enum.take(200)
 
     assert Correlation.pearson(vector1, vector2) == -0.02947086158072648
+  end
+
+  test :weighted_pearson_is_nil_when_any_vector_is_empty do
+    refute Correlation.pearson([], [1], [2])
+    refute Correlation.pearson([1], [], [2])
+    refute Correlation.pearson([1], [2], [])
+    refute Correlation.pearson([], [], [])
   end
 
   test :weighted_pearson_correlation_with_constant_weights_is_consistent_with_unweighted_correlation do

@@ -4,10 +4,10 @@ defmodule Numerix.DistanceTest do
   alias Numerix.Distance
   alias Numerix.Correlation
 
-  test :pearson_returns_error_when_any_vector_is_empty do
-    assert Distance.pearson([],[1]) == :error
-    assert Distance.pearson([2],[]) == :error
-    assert Distance.pearson([],[]) == :error
+  test :pearson_is_nil_when_any_vector_is_empty do
+    refute Distance.pearson([],[1])
+    refute Distance.pearson([2],[])
+    refute Distance.pearson([],[])
   end
 
   property :pearson_distance_is_the_inverse_of_its_correlation do
@@ -25,10 +25,10 @@ defmodule Numerix.DistanceTest do
     end
   end
 
-  test :minkowski_returns_error_when_any_vector_is_empty do
-    assert Distance.minkowski([],[1]) == :error
-    assert Distance.minkowski([2],[]) == :error
-    assert Distance.minkowski([],[]) == :error
+  test :minkowski_is_nil_when_any_vector_is_empty do
+    refute Distance.minkowski([],[1])
+    refute Distance.minkowski([2],[])
+    refute Distance.minkowski([],[])
   end
 
   property :minkowski_distance_is_zero_when_the_vectors_are_equal do
@@ -52,10 +52,10 @@ defmodule Numerix.DistanceTest do
     assert Distance.minkowski(vector1, vector2, lambda) == 2.3185419629968713
   end
 
-  test :euclidean_returns_error_when_any_vector_is_empty do
-    assert Distance.euclidean([],[1]) == :error
-    assert Distance.euclidean([2],[]) == :error
-    assert Distance.euclidean([],[]) == :error
+  test :euclidean_is_nil_when_any_vector_is_empty do
+    refute Distance.euclidean([],[1])
+    refute Distance.euclidean([2],[])
+    refute Distance.euclidean([],[])
   end
 
   property :euclidean_distance_is_zero_when_the_vectors_are_equal do
@@ -71,10 +71,10 @@ defmodule Numerix.DistanceTest do
     assert Distance.euclidean(vector1, vector2) == 4.2426406871196605
   end
 
-  test :manhattan_returns_error_when_any_vector_is_empty do
-    assert Distance.manhattan([],[1]) == :error
-    assert Distance.manhattan([2],[]) == :error
-    assert Distance.manhattan([],[]) == :error
+  test :manhattan_is_nil_when_any_vector_is_empty do
+    refute Distance.manhattan([],[1])
+    refute Distance.manhattan([2],[])
+    refute Distance.manhattan([],[])
   end
 
   property :manhattan_distance_is_zero_when_the_vectors_are_equal do

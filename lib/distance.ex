@@ -9,7 +9,7 @@ defmodule Numerix.Distance do
   @typedoc """
   Something that may be a float.
   """
-  @type maybe_float :: float | :error
+  @type maybe_float :: float | nil
 
   @doc """
   Calculates the Pearson's distance between two vectors.
@@ -17,7 +17,7 @@ defmodule Numerix.Distance do
   @spec pearson([number], [number]) :: maybe_float
   def pearson(vector1, vector2) do
     case Correlation.pearson(vector1, vector2) do
-      :error -> :error
+      nil -> nil
       correlation -> 1.0 - correlation
     end
   end
@@ -27,8 +27,8 @@ defmodule Numerix.Distance do
   """
   @spec minkowski([number], [number], integer) :: maybe_float
   def minkowski(vector1, vector2, lambda \\ 3)
-  def minkowski([], _, _lambda), do: :error
-  def minkowski(_, [], _lambda), do: :error
+  def minkowski([], _, _lambda), do: nil
+  def minkowski(_, [], _lambda), do: nil
   def minkowski(vector1, vector2, lambda) do
     vector1
     |> Stream.zip(vector2)

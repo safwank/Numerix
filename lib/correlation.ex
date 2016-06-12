@@ -6,12 +6,17 @@ defmodule Numerix.Correlation do
   Statistical correlation functions between two vectors.
   """
 
+  @typedoc """
+  Something that may be a float.
+  """
+  @type maybe_float :: float | nil
+
   @doc """
   Calculates the Pearson correlation coefficient between two vectors.
   """
-  @spec pearson([number], [number]) :: float | :error
-  def pearson([], _), do: :error
-  def pearson(_, []), do: :error
+  @spec pearson([number], [number]) :: maybe_float
+  def pearson([], _), do: nil
+  def pearson(_, []), do: nil
   def pearson(vector1, vector2) do
     sum1 = vector1 |> Enum.sum
     sum2 = vector2 |> Enum.sum
@@ -40,10 +45,10 @@ defmodule Numerix.Correlation do
   @doc """
   Calculates the weighted Pearson correlation coefficient between two vectors.
   """
-  @spec pearson([number], [number], [number]) :: float | :error
-  def pearson([], _, _), do: :error
-  def pearson(_, [], _), do: :error
-  def pearson(_, _, []), do: :error
+  @spec pearson([number], [number], [number]) :: maybe_float
+  def pearson([], _, _), do: nil
+  def pearson(_, [], _), do: nil
+  def pearson(_, _, []), do: nil
   def pearson(vector1, vector2, weights) do
     weighted_covariance_xy = Statistics.weighted_covariance(vector1, vector2, weights)
     weighted_covariance_xx = Statistics.weighted_covariance(vector1, vector1, weights)

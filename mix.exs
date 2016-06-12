@@ -30,7 +30,7 @@ defmodule Numerix.Mixfile do
 
   defp deps do
     [
-      {:credo, "~> 0.3.13", only: :test},
+      {:credo, "~> 0.4.3", only: :test},
       {:dialyxir, "~> 0.3.3", only: [:dev, :test]},
       {:excoveralls, "~> 0.5.4", only: :test},
       {:excheck, "~> 0.3.3", only: :test},

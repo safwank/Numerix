@@ -3,8 +3,8 @@ defmodule Numerix.StatisticsTest do
   use ExCheck
   alias Numerix.Statistics
 
-  test :mean_returns_error_when_list_is_empty do
-    assert Statistics.mean([]) == :error
+  test :mean_is_nil_when_list_is_empty do
+    refute Statistics.mean([])
   end
 
   property :mean_times_item_count_equals_sum do
@@ -22,8 +22,8 @@ defmodule Numerix.StatisticsTest do
     end
   end
 
-  test :median_returns_error_when_list_is_empty do
-    assert Statistics.median([]) == :error
+  test :median_is_nil_when_list_is_empty do
+    refute Statistics.median([])
   end
 
   property :median_is_the_middle_value_of_a_sorted_list do
@@ -42,8 +42,8 @@ defmodule Numerix.StatisticsTest do
     end
   end
 
-  test :mode_returns_error_when_list_is_empty do
-    assert Statistics.mode([]) == :error
+  test :mode_is_nil_when_list_is_empty do
+    refute Statistics.mode([])
   end
 
   property :mode_is_nil_if_no_value_is_repeated do
@@ -62,19 +62,20 @@ defmodule Numerix.StatisticsTest do
 
   property :mode_is_the_most_frequent_set_of_values do
     for_all {x, y, xs} in such_that({x_, y_, _} in {number, number, non_empty(list(number))} when x_ < y_) do
-      frequent = [x, y]
-      frequent_list = frequent |> Stream.cycle |> Enum.take(2 * (length(xs) + 1))
+      frequent_set = [x, y]
+      frequent_list = frequent_set |> Stream.cycle |> Enum.take(2 * (length(xs) + 1))
+
       xs
-      |> Enum.reject(&(Enum.member?(frequent, &1)))
+      |> Enum.reject(&(Enum.member?(frequent_set, &1)))
       |> Enum.concat(frequent_list)
       |> Enum.shuffle
       |> Statistics.mode
-      |> Enum.sort == frequent
+      |> Enum.sort == frequent_set
     end
   end
 
-  test :range_returns_error_when_list_is_empty do
-    assert Statistics.range([]) == :error
+  test :range_is_nil_when_list_is_empty do
+    refute Statistics.range([])
   end
 
   property :range_is_the_difference_between_the_largest_and_smallest_values do
@@ -84,12 +85,12 @@ defmodule Numerix.StatisticsTest do
     end
   end
 
-  test :variance_returns_error_when_list_is_empty do
-    assert Statistics.variance([]) == :error
+  test :variance_is_nil_when_list_is_empty do
+    refute Statistics.variance([])
   end
 
-  test :variance_returns_error_when_list_has_only_one_element do
-    assert Statistics.variance([42]) == :error
+  test :variance_is_nil_when_list_has_only_one_element do
+    refute Statistics.variance([42])
   end
 
   property :variance_is_the_square_of_standard_deviation do
@@ -99,8 +100,8 @@ defmodule Numerix.StatisticsTest do
     end
   end
 
-  test :population_variance_returns_error_when_list_is_empty do
-    assert Statistics.population_variance([]) == :error
+  test :population_variance_is_nil_when_list_is_empty do
+    refute Statistics.population_variance([])
   end
 
   property :population_variance_is_the_square_of_population_standard_deviation do
@@ -110,12 +111,12 @@ defmodule Numerix.StatisticsTest do
     end
   end
 
-  test :std_dev_returns_error_when_list_is_empty do
-    assert Statistics.std_dev([]) == :error
+  test :std_dev_is_nil_when_list_is_empty do
+    refute Statistics.std_dev([])
   end
 
-  test :std_dev_returns_error_when_list_has_only_one_element do
-    assert Statistics.std_dev([42]) == :error
+  test :std_dev_is_nil_when_list_has_only_one_element do
+    refute Statistics.std_dev([42])
   end
 
   test :std_dev_is_correct_for_specific_datasets do
@@ -126,23 +127,23 @@ defmodule Numerix.StatisticsTest do
     assert_in_delta(dataset2[:data] |> Statistics.std_dev, dataset2[:std_dev], 0.0001)
   end
 
-  test :population_std_dev_returns_error_when_list_is_empty do
-    assert Statistics.population_std_dev([]) == :error
+  test :population_std_dev_is_nil_when_list_is_empty do
+    refute Statistics.population_std_dev([])
   end
 
-  test :covariance_returns_error_when_any_list_is_empty do
-    assert Statistics.covariance([], [1, 2]) == :error
-    assert Statistics.covariance([1, 2], []) == :error
+  test :covariance_is_nil_when_any_list_is_empty do
+    refute Statistics.covariance([], [1, 2])
+    refute Statistics.covariance([1, 2], [])
   end
 
-  test :covariance_returns_error_when_any_list_has_only_one_element do
-    assert Statistics.covariance([1], [2, 3]) == :error
-    assert Statistics.covariance([1, 2], [3]) == :error
+  test :covariance_is_nil_when_any_list_has_only_one_element do
+    refute Statistics.covariance([1], [2, 3])
+    refute Statistics.covariance([1, 2], [3])
   end
 
-  test :covariance_returns_error_when_the_list_lengths_do_not_match do
-    assert Statistics.covariance([1, 2], [3, 4, 5]) == :error
-    assert Statistics.covariance([1, 2, 3], [4, 5]) == :error
+  test :covariance_is_nil_when_the_list_lengths_do_not_match do
+    refute Statistics.covariance([1, 2], [3, 4, 5])
+    refute Statistics.covariance([1, 2, 3], [4, 5])
   end
 
   property :covariance_is_consistent_with_variance do
@@ -160,14 +161,14 @@ defmodule Numerix.StatisticsTest do
     end
   end
 
-  test :population_covariance_returns_error_when_any_list_is_empty do
-    assert Statistics.population_covariance([], [1, 2]) == :error
-    assert Statistics.population_covariance([1, 2], []) == :error
+  test :population_covariance_is_nil_when_any_list_is_empty do
+    refute Statistics.population_covariance([], [1, 2])
+    refute Statistics.population_covariance([1, 2], [])
   end
 
-  test :population_covariance_returns_error_when_the_list_lengths_do_not_match do
-    assert Statistics.population_covariance([1, 2], [3, 4, 5]) == :error
-    assert Statistics.population_covariance([1, 2, 3], [4, 5]) == :error
+  test :population_covariance_is_nil_when_the_list_lengths_do_not_match do
+    refute Statistics.population_covariance([1, 2], [3, 4, 5])
+    refute Statistics.population_covariance([1, 2, 3], [4, 5])
   end
 
   property :population_covariance_is_consistent_with_population_variance do
@@ -185,13 +186,13 @@ defmodule Numerix.StatisticsTest do
     end
   end
 
-  test :quantile_returns_error_when_list_is_empty do
-    assert Statistics.quantile([], 0.5) == :error
+  test :quantile_is_nil_when_list_is_empty do
+    refute Statistics.quantile([], 0.5)
   end
 
-  test :quantile_returns_error_when_tau_is_invalid do
-    assert Statistics.quantile([1, 2, 3], -0.1) == :error
-    assert Statistics.quantile([1, 2, 3], -1.1) == :error
+  test :quantile_is_nil_when_tau_is_invalid do
+    refute Statistics.quantile([1, 2, 3], -0.1)
+    refute Statistics.quantile([1, 2, 3], -1.1)
   end
 
   test :quantile_is_correct_for_specific_examples do
@@ -204,14 +205,14 @@ defmodule Numerix.StatisticsTest do
     end)
   end
 
-  test :weighted_mean_returns_error_when_any_list_is_empty do
-    assert Statistics.weighted_mean([], [1, 2]) == :error
-    assert Statistics.weighted_mean([1, 2], []) == :error
+  test :weighted_mean_is_nil_when_any_list_is_empty do
+    refute Statistics.weighted_mean([], [1, 2])
+    refute Statistics.weighted_mean([1, 2], [])
   end
 
-  test :weighted_mean_returns_error_when_the_list_lengths_do_not_match do
-    assert Statistics.weighted_mean([1, 2], [3, 4, 5]) == :error
-    assert Statistics.weighted_mean([1, 2, 3], [4, 5]) == :error
+  test :weighted_mean_is_nil_when_the_list_lengths_do_not_match do
+    refute Statistics.weighted_mean([1, 2], [3, 4, 5])
+    refute Statistics.weighted_mean([1, 2, 3], [4, 5])
   end
 
   property :weighted_mean_is_consistent_with_arithmetic_mean do
