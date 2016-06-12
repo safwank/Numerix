@@ -3,8 +3,8 @@ defmodule Numerix.StatisticsTest do
   use ExCheck
   alias Numerix.Statistics
 
-  test :mean_is_zero_when_list_is_empty do
-    assert Statistics.mean([]) == 0
+  test :mean_returns_error_when_list_is_empty do
+    assert Statistics.mean([]) == :error
   end
 
   property :mean_times_item_count_equals_sum do
@@ -22,8 +22,8 @@ defmodule Numerix.StatisticsTest do
     end
   end
 
-  test :median_is_zero_when_list_is_empty do
-    assert Statistics.median([]) == 0
+  test :median_returns_error_when_list_is_empty do
+    assert Statistics.median([]) == :error
   end
 
   property :median_is_the_middle_value_of_a_sorted_list do
@@ -42,8 +42,8 @@ defmodule Numerix.StatisticsTest do
     end
   end
 
-  test :mode_is_nil_when_list_is_empty do
-    assert Statistics.mode([]) == nil
+  test :mode_returns_error_when_list_is_empty do
+    assert Statistics.mode([]) == :error
   end
 
   property :mode_is_nil_if_no_value_is_repeated do
@@ -73,8 +73,8 @@ defmodule Numerix.StatisticsTest do
     end
   end
 
-  test :range_is_zero_when_list_is_empty do
-    assert Statistics.range([]) == 0
+  test :range_returns_error_when_list_is_empty do
+    assert Statistics.range([]) == :error
   end
 
   property :range_is_the_difference_between_the_largest_and_smallest_values do
@@ -183,6 +183,25 @@ defmodule Numerix.StatisticsTest do
       {xs, ys} = ListHelper.equalize_length(xs, ys)
       Statistics.population_covariance(xs, ys) == Statistics.population_covariance(ys, xs)
     end
+  end
+
+  test :quantile_returns_error_when_list_is_empty do
+    assert Statistics.quantile([], 0.5) == :error
+  end
+
+  test :quantile_returns_error_when_tau_is_invalid do
+    assert Statistics.quantile([1, 2, 3], -0.1) == :error
+    assert Statistics.quantile([1, 2, 3], -1.1) == :error
+  end
+
+  test :quantile_is_correct_for_specific_examples do
+    xs = [-1, 5, 0, -3, 10, -0.5, 4, 0.2, 1, 6]
+
+    [{0, -3}, {1, 10}, {0.5, 3/5}, {0.2, -4/5}, {0.7, 137/30},
+     {0.01, -3}, {0.99, 10}, {0.52, 287/375}, {0.325, -37/240}]
+    |> Enum.each(fn {tau, expected} ->
+      assert_in_delta(Statistics.quantile(xs, tau), expected, 0.0001)
+    end)
   end
 
   test :weighted_mean_returns_error_when_any_list_is_empty do
