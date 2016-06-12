@@ -34,7 +34,9 @@ defmodule Numerix.Mixfile do
       {:dialyxir, "~> 0.3.3", only: [:dev, :test]},
       {:excoveralls, "~> 0.5.4", only: :test},
       {:excheck, "~> 0.3.3", only: :test},
-      {:triq, github: "krestenkrab/triq", only: :test}
+      {:triq, github: "krestenkrab/triq", only: :test},
+      {:ex_doc, "~> 0.11", only: :dev},
+      {:earmark, "~> 0.2.1", only: :dev}
     ]
   end
 
