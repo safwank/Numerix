@@ -17,3 +17,7 @@ Add `numerix` to your list of dependencies in `mix.exs`:
 ## Examples
 
 Check out the [tests](https://github.com/safwank/Numerix/tree/master/test) for examples.
+
+## Documentation
+
+Check out the [API reference](https://hexdocs.pm/numerix/0.0.4/api-reference.html) for the latest documentation.
