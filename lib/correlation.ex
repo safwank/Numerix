@@ -1,5 +1,6 @@
 defmodule Numerix.Correlation do
   alias Numerix.Math
+  alias Numerix.Statistics
 
   @moduledoc """
   Statistical correlation functions between two vectors.
@@ -44,9 +45,9 @@ defmodule Numerix.Correlation do
   def pearson(_, [], _), do: :error
   def pearson(_, _, []), do: :error
   def pearson(vector1, vector2, weights) do
-    weighted_covariance_xy = weighted_covariance(vector1, vector2, weights)
-    weighted_covariance_xx = weighted_covariance(vector1, vector1, weights)
-    weighted_covariance_yy = weighted_covariance(vector2, vector2, weights)
+    weighted_covariance_xy = Statistics.weighted_covariance(vector1, vector2, weights)
+    weighted_covariance_xx = Statistics.weighted_covariance(vector1, vector1, weights)
+    weighted_covariance_yy = Statistics.weighted_covariance(vector2, vector2, weights)
 
     weighted_covariance_xy
     |> Math.divide(:math.sqrt(weighted_covariance_xx * weighted_covariance_yy))
@@ -54,26 +55,6 @@ defmodule Numerix.Correlation do
 
   defp square(vector) do
     vector |> Enum.map(&:math.pow(&1, 2))
-  end
-
-  defp weighted_covariance(vector1, vector2, weights) do
-    weighted_mean1 = weighted_mean(vector1, weights)
-    weighted_mean2 = weighted_mean(vector2, weights)
-
-    vector1
-    |> Stream.zip(vector2)
-    |> Stream.zip(weights)
-    |> Stream.map(fn {{x, y}, w} -> w * (x - weighted_mean1) * (y - weighted_mean2) end)
-    |> Enum.sum
-    |> Math.divide(weights |> Enum.sum)
-  end
-
-  defp weighted_mean(vector, weights) do
-    vector
-    |> Stream.zip(weights)
-    |> Stream.map(fn {x, w} -> x * w end)
-    |> Enum.sum
-    |> Math.divide(weights |> Enum.sum)
   end
 
 end

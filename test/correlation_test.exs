@@ -39,15 +39,15 @@ defmodule Numerix.CorrelationTest do
     assert Correlation.pearson(vector1, vector2) == -0.02947086158072648
   end
 
-  test :weighted_pearson_correlation_with_constant_weights_is_almost_equal_the_unweighted_correlation do
+  test :weighted_pearson_correlation_with_constant_weights_is_consistent_with_unweighted_correlation do
     vector1 = DataHelper.read("Lew") |> Map.get(:data) |> Enum.take(200)
     vector2 = DataHelper.read("Lottery") |> Map.get(:data) |> Enum.take(200)
     weights = [2.0] |> Stream.cycle |> Enum.take(vector1 |> length)
 
-    weighted_correlation = Correlation.pearson(vector1, vector2, weights) |> Float.round(14)
-    unweighted_correlation = Correlation.pearson(vector1, vector2) |> Float.round(14)
+    weighted_correlation = Correlation.pearson(vector1, vector2, weights)
+    unweighted_correlation = Correlation.pearson(vector1, vector2)
 
-    assert weighted_correlation == unweighted_correlation
+    assert_in_delta(weighted_correlation, unweighted_correlation, 0.0000000001)
   end
 
 end

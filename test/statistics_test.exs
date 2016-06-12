@@ -86,7 +86,15 @@ defmodule Numerix.StatisticsTest do
 
   property :variance_is_the_square_of_standard_deviation do
     for_all xs in such_that(xxs in non_empty(list(number)) when length(xxs) > 1) do
-      xs |> Statistics.variance |> Float.round(4) == xs |> Statistics.std_dev |> :math.pow(2) |> Float.round(4)
+      xs |> Statistics.variance |> Float.round(4) ==
+        xs |> Statistics.std_dev |> :math.pow(2) |> Float.round(4)
+    end
+  end
+
+  property :population_variance_is_the_square_of_population_standard_deviation do
+    for_all xs in such_that(xxs in non_empty(list(number)) when length(xxs) > 1) do
+      xs |> Statistics.population_variance |> Float.round(4) ==
+        xs |> Statistics.population_std_dev |> :math.pow(2) |> Float.round(4)
     end
   end
 
@@ -104,12 +112,27 @@ defmodule Numerix.StatisticsTest do
     end
   end
 
+  property :population_covariance_is_consistent_with_population_variance do
+    for_all xs in such_that(xxs in non_empty(list(number)) when length(xxs) > 1) do
+      assert_in_delta(Statistics.population_covariance(xs, xs), Statistics.population_variance(xs), 0.0000000001)
+    end
+  end
+
   property :covariance_is_symmetric do
     for_all {xs, ys} in such_that({xxs, yys} in {non_empty(list(number)), non_empty(list(number))}
       when length(xxs) > 1 and length(yys) > 1) do
 
       {xs, ys} = ListHelper.equalize_length(xs, ys)
       Statistics.covariance(xs, ys) == Statistics.covariance(ys, xs)
+    end
+  end
+
+  property :population_covariance_is_symmetric do
+    for_all {xs, ys} in such_that({xxs, yys} in {non_empty(list(number)), non_empty(list(number))}
+      when length(xxs) > 1 and length(yys) > 1) do
+
+      {xs, ys} = ListHelper.equalize_length(xs, ys)
+      Statistics.population_covariance(xs, ys) == Statistics.population_covariance(ys, xs)
     end
   end
 

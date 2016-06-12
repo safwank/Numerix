@@ -60,7 +60,7 @@ defmodule Numerix.Statistics do
   end
 
   @doc """
-  Calculates the variance of a list of numbers.
+  Calculates the unbiased population variance from a sample vector.
   """
   @spec variance([number]) :: maybe_float
   def variance([]), do: :error
@@ -73,7 +73,19 @@ defmodule Numerix.Statistics do
   end
 
   @doc """
-  Calculates the standard deviation of a list of numbers.
+  Calculates the population variance from a full population vector.
+  """
+  @spec population_variance([number]) :: maybe_float
+  def population_variance([]), do: :error
+  def population_variance(xs) do
+    xs
+    |> Enum.map(fn x -> :math.pow(x - mean(xs), 2) end)
+    |> Enum.sum
+    |> Math.divide(Enum.count(xs))
+  end
+
+  @doc """
+  Calculates the unbiased standard deviation from a sample vector.
   """
   @spec std_dev([number]) :: maybe_float
   def std_dev([]), do: :error
@@ -83,14 +95,25 @@ defmodule Numerix.Statistics do
   end
 
   @doc """
-  Calculates a measure of how much two vectors change together.
+  Calculates the population standard deviation from a full population vector.
+  """
+  @spec population_std_dev([number]) :: maybe_float
+  def population_std_dev([]), do: :error
+  def population_std_dev([_x]), do: :error
+  def population_std_dev(xs) do
+    xs |> population_variance |> :math.sqrt
+  end
+
+  @doc """
+  Calculates the unbiased covariance from two sample vectors.
   """
   @spec covariance([number], [number]) :: maybe_float
   def covariance([], _), do: :error
   def covariance(_, []), do: :error
   def covariance([_x], _), do: :error
   def covariance(_, [_y]), do: :error
-  def covariance(xs, ys) when length(xs) == length(ys) do
+  def covariance(xs, ys) when length(xs) != length(ys), do: :error
+  def covariance(xs, ys) do
     mean_x = mean(xs)
     mean_y = mean(ys)
 
@@ -99,6 +122,60 @@ defmodule Numerix.Statistics do
     |> Stream.map(fn {x, y} -> (x - mean_x) * (y - mean_y) end)
     |> Enum.sum
     |> Math.divide(length(xs) - 1)
+  end
+
+  @doc """
+  Calculates the population covariance from two full population vectors.
+  """
+  @spec population_covariance([number], [number]) :: maybe_float
+  def population_covariance([], _), do: :error
+  def population_covariance(_, []), do: :error
+  def population_covariance(xs, ys) when length(xs) != length(ys), do: :error
+  def population_covariance(xs, ys) do
+    mean_x = mean(xs)
+    mean_y = mean(ys)
+
+    xs
+    |> Stream.zip(ys)
+    |> Stream.map(fn {x, y} -> (x - mean_x) * (y - mean_y) end)
+    |> Enum.sum
+    |> Math.divide(length(xs))
+  end
+
+  @doc """
+  Calculates the weighted measure of how much two vectors change together.
+  """
+  @spec weighted_covariance([number], [number], [number]) :: maybe_float
+  def weighted_covariance([], _, _), do: :error
+  def weighted_covariance(_, [], _), do: :error
+  def weighted_covariance(_, _, []), do: :error
+  def weighted_covariance(xs, ys, weights)
+    when length(xs) != length(ys) or length(xs) != length(weights), do: :error
+  def weighted_covariance(xs, ys, weights) do
+    weighted_mean1 = weighted_mean(xs, weights)
+    weighted_mean2 = weighted_mean(ys, weights)
+
+    xs
+    |> Stream.zip(ys)
+    |> Stream.zip(weights)
+    |> Stream.map(fn {{x, y}, w} -> w * (x - weighted_mean1) * (y - weighted_mean2) end)
+    |> Enum.sum
+    |> Math.divide(weights |> Enum.sum)
+  end
+
+  @doc """
+  Calculates the weighted average of a list of numbers.
+  """
+  @spec weighted_mean([number], [number]) :: maybe_float
+  def weighted_mean([], _), do: :error
+  def weighted_mean(_, []), do: :error
+  def weighted_mean(xs, weights) when length(xs) != length(weights), do: :error
+  def weighted_mean(xs, weights) do
+    xs
+    |> Stream.zip(weights)
+    |> Stream.map(fn {x, w} -> x * w end)
+    |> Enum.sum
+    |> Math.divide(weights |> Enum.sum)
   end
 
 end
