@@ -185,4 +185,29 @@ defmodule Numerix.StatisticsTest do
     end
   end
 
+  test :weighted_mean_returns_error_when_any_list_is_empty do
+    assert Statistics.weighted_mean([], [1, 2]) == :error
+    assert Statistics.weighted_mean([1, 2], []) == :error
+  end
+
+  test :weighted_mean_returns_error_when_the_list_lengths_do_not_match do
+    assert Statistics.weighted_mean([1, 2], [3, 4, 5]) == :error
+    assert Statistics.weighted_mean([1, 2, 3], [4, 5]) == :error
+  end
+
+  property :weighted_mean_is_consistent_with_arithmetic_mean do
+    for_all {xs, w} in {non_empty(list(int)), pos_integer} do
+      weights = [w] |> Stream.cycle |> Enum.take(length(xs))
+
+      Statistics.weighted_mean(xs, weights) == Statistics.mean(xs)
+    end
+  end
+
+  test :weighted_mean_is_correct_for_a_specific_dataset do
+    xs = [1, 3, 5, 6, 8, 9]
+    weights = [1.0, 0.8, 1.0, 0.9, 1.0, 0.66]
+
+    assert_in_delta(Statistics.weighted_mean(xs, weights), 5.175, 0.001)
+  end
+
 end
