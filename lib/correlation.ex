@@ -1,20 +1,14 @@
 defmodule Numerix.Correlation do
-  alias Numerix.Math
-  alias Numerix.Statistics
+  alias Numerix.{Common, Math, Statistics}
 
   @moduledoc """
   Statistical correlation functions between two vectors.
   """
 
-  @typedoc """
-  Something that may be a float.
-  """
-  @type maybe_float :: float | nil
-
   @doc """
   Calculates the Pearson correlation coefficient between two vectors.
   """
-  @spec pearson([number], [number]) :: maybe_float
+  @spec pearson([number], [number]) :: Common.maybe_float
   def pearson([], _), do: nil
   def pearson(_, []), do: nil
   def pearson(vector1, vector2) do
@@ -45,7 +39,7 @@ defmodule Numerix.Correlation do
   @doc """
   Calculates the weighted Pearson correlation coefficient between two vectors.
   """
-  @spec pearson([number], [number], [number]) :: maybe_float
+  @spec pearson([number], [number], [number]) :: Common.maybe_float
   def pearson([], _, _), do: nil
   def pearson(_, [], _), do: nil
   def pearson(_, _, []), do: nil

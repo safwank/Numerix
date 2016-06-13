@@ -3,17 +3,12 @@ defmodule Numerix.Statistics do
   Common statistical functions.
   """
 
-  alias Numerix.Math
-
-  @typedoc """
-  Something that may be a float.
-  """
-  @type maybe_float :: float | nil
+  alias Numerix.{Math, Common}
 
   @doc """
   Calculates the average of a list of numbers.
   """
-  @spec mean([number]) :: maybe_float
+  @spec mean([number]) :: Common.maybe_float
   def mean([]), do: nil
   def mean(xs) do
     Enum.sum(xs) / Enum.count(xs)
@@ -22,7 +17,7 @@ defmodule Numerix.Statistics do
   @doc """
   Returns the middle value in a list of numbers.
   """
-  @spec median([number]) :: maybe_float
+  @spec median([number]) :: Common.maybe_float
   def median([]), do: nil
   def median(xs) do
     middle_index = round((length(xs) / 2)) - 1
@@ -52,7 +47,7 @@ defmodule Numerix.Statistics do
   @doc """
   Calculates the difference between the largest and smallest values in a list.
   """
-  @spec range([number]) :: maybe_float
+  @spec range([number]) :: Common.maybe_float
   def range([]), do: nil
   def range(xs) do
     {minimum, maximum} = Enum.min_max(xs)
@@ -62,7 +57,7 @@ defmodule Numerix.Statistics do
   @doc """
   Calculates the unbiased population variance from a sample vector.
   """
-  @spec variance([number]) :: maybe_float
+  @spec variance([number]) :: Common.maybe_float
   def variance([]), do: nil
   def variance([_x]), do: nil
   def variance(xs) do
@@ -75,7 +70,7 @@ defmodule Numerix.Statistics do
   @doc """
   Calculates the population variance from a full population vector.
   """
-  @spec population_variance([number]) :: maybe_float
+  @spec population_variance([number]) :: Common.maybe_float
   def population_variance([]), do: nil
   def population_variance(xs) do
     xs
@@ -87,7 +82,7 @@ defmodule Numerix.Statistics do
   @doc """
   Calculates the unbiased standard deviation from a sample vector.
   """
-  @spec std_dev([number]) :: maybe_float
+  @spec std_dev([number]) :: Common.maybe_float
   def std_dev([]), do: nil
   def std_dev([_x]), do: nil
   def std_dev(xs) do
@@ -97,7 +92,7 @@ defmodule Numerix.Statistics do
   @doc """
   Calculates the population standard deviation from a full population vector.
   """
-  @spec population_std_dev([number]) :: maybe_float
+  @spec population_std_dev([number]) :: Common.maybe_float
   def population_std_dev([]), do: nil
   def population_std_dev(xs) do
     xs |> population_variance |> :math.sqrt
@@ -106,7 +101,7 @@ defmodule Numerix.Statistics do
   @doc """
   Calculates the unbiased covariance from two sample vectors.
   """
-  @spec covariance([number], [number]) :: maybe_float
+  @spec covariance([number], [number]) :: Common.maybe_float
   def covariance([], _), do: nil
   def covariance(_, []), do: nil
   def covariance([_x], _), do: nil
@@ -126,7 +121,7 @@ defmodule Numerix.Statistics do
   @doc """
   Calculates the population covariance from two full population vectors.
   """
-  @spec population_covariance([number], [number]) :: maybe_float
+  @spec population_covariance([number], [number]) :: Common.maybe_float
   def population_covariance([], _), do: nil
   def population_covariance(_, []), do: nil
   def population_covariance(xs, ys) when length(xs) != length(ys), do: nil
@@ -146,7 +141,7 @@ defmodule Numerix.Statistics do
   Approximately median-unbiased irrespective of the sample distribution.
   This implements the R-8 type of https://en.wikipedia.org/wiki/Quantile.
   """
-  @spec quantile([number], number) :: maybe_float
+  @spec quantile([number], number) :: Common.maybe_float
   def quantile([], _tau), do: nil
   def quantile(_xs, tau) when tau < 0 or tau > 1, do: nil
   def quantile(xs, tau) do
@@ -161,7 +156,7 @@ defmodule Numerix.Statistics do
   Approximately median-unbiased irrespective of the sample distribution.
   This implements the R-8 type of https://en.wikipedia.org/wiki/Quantile.
   """
-  @spec percentile([number], integer) :: maybe_float
+  @spec percentile([number], integer) :: Common.maybe_float
   def percentile([], _p), do: nil
   def percentile(_xs, p) when p < 0 or p > 100, do: nil
   def percentile(xs, p) do
@@ -171,7 +166,7 @@ defmodule Numerix.Statistics do
   @doc """
   Calculates the weighted measure of how much two vectors change together.
   """
-  @spec weighted_covariance([number], [number], [number]) :: maybe_float
+  @spec weighted_covariance([number], [number], [number]) :: Common.maybe_float
   def weighted_covariance([], _, _), do: nil
   def weighted_covariance(_, [], _), do: nil
   def weighted_covariance(_, _, []), do: nil
@@ -192,7 +187,7 @@ defmodule Numerix.Statistics do
   @doc """
   Calculates the weighted average of a list of numbers.
   """
-  @spec weighted_mean([number], [number]) :: maybe_float
+  @spec weighted_mean([number], [number]) :: Common.maybe_float
   def weighted_mean([], _), do: nil
   def weighted_mean(_, []), do: nil
   def weighted_mean(xs, weights) when length(xs) != length(weights), do: nil

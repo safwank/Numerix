@@ -10,13 +10,15 @@ defmodule Numerix.SpecialFunctionsTest do
 
   test :logit_is_correct_for_specific_examples do
     [
+      {0.000000, :negative_infinity},
       {0.000010, -11.512915464920228103874353849992239636376994324587},
       {0.001000, -6.9067547786485535272274487616830597875179908939086},
       {0.100000, -2.1972245773362193134015514347727700402304323440139},
       {0.500000, 0.0},
       {0.900000, 2.1972245773362195801634726294284168954491240598975},
       {0.999000, 6.9067547786485526081487245019905638981131702804661},
-      {0.999990, 11.512915464924779098232747799811946290419057060965}
+      {0.999990, 11.512915464924779098232747799811946290419057060965},
+      {1.000000, :infinity}
     ]
     |> Enum.each(fn {p, expected} ->
       assert SpecialFunctions.logit(p) == expected
@@ -24,11 +26,15 @@ defmodule Numerix.SpecialFunctionsTest do
   end
 
   property :logistic_is_the_inverse_of_logit do
-    for_all x in int(1, 999) do
+    for_all x in int(0, 1000) do
       p = x / 1000
       logit = SpecialFunctions.logit(p)
 
-      assert_in_delta(SpecialFunctions.logistic(logit), p, 0.001)
+      if is_atom(logit) do
+        SpecialFunctions.logistic(logit) == p
+      else
+        assert_in_delta(SpecialFunctions.logistic(logit), p, 0.001)
+      end
     end
   end
 

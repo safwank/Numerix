@@ -1,8 +1,7 @@
 defmodule Numerix.DistanceTest do
   use ExUnit.Case, async: false
   use ExCheck
-  alias Numerix.Distance
-  alias Numerix.Correlation
+  alias Numerix.{Distance, Correlation}
 
   test :pearson_is_nil_when_any_vector_is_empty do
     refute Distance.pearson([],[1])

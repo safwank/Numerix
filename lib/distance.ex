@@ -3,18 +3,12 @@ defmodule Numerix.Distance do
   Distance functions between two vectors.
   """
 
-  alias Numerix.Correlation
-  alias Numerix.Math
-
-  @typedoc """
-  Something that may be a float.
-  """
-  @type maybe_float :: float | nil
+  alias Numerix.{Common, Correlation, Math}
 
   @doc """
   Calculates the Pearson's distance between two vectors.
   """
-  @spec pearson([number], [number]) :: maybe_float
+  @spec pearson([number], [number]) :: Common.maybe_float
   def pearson(vector1, vector2) do
     case Correlation.pearson(vector1, vector2) do
       nil -> nil
@@ -25,7 +19,7 @@ defmodule Numerix.Distance do
   @doc """
   Calculates the Minkowski distance between two vectors.
   """
-  @spec minkowski([number], [number], integer) :: maybe_float
+  @spec minkowski([number], [number], integer) :: Common.maybe_float
   def minkowski(vector1, vector2, lambda \\ 3)
   def minkowski([], _, _lambda), do: nil
   def minkowski(_, [], _lambda), do: nil
@@ -40,7 +34,7 @@ defmodule Numerix.Distance do
   @doc """
   Calculates the Euclidean distance between two vectors.
   """
-  @spec euclidean([number], [number]) :: maybe_float
+  @spec euclidean([number], [number]) :: Common.maybe_float
   def euclidean(vector1, vector2) do
     minkowski(vector1, vector2, 2)
   end
@@ -48,7 +42,7 @@ defmodule Numerix.Distance do
   @doc """
   Calculates the Manhattan distance between two vectors.
   """
-  @spec manhattan([number], [number]) :: maybe_float
+  @spec manhattan([number], [number]) :: Common.maybe_float
   def manhattan(vector1, vector2) do
     minkowski(vector1, vector2, 1)
   end
