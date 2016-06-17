@@ -38,4 +38,12 @@ defmodule Numerix.SpecialFunctionsTest do
     end
   end
 
+  property :logistic_is_between_0_and_1 do
+    for_all x in number do
+      logistic = SpecialFunctions.logistic(x)
+
+      logistic >= 0 and logistic <= 1
+    end
+  end
+
 end
