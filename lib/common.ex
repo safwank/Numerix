@@ -1,6 +1,6 @@
 defmodule Numerix.Common do
   @moduledoc """
-  A module containing common typespecs and functions.
+  Common typespecs and functions.
   """
 
   @typedoc """
