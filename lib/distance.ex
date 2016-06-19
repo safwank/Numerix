@@ -59,11 +59,12 @@ defmodule Numerix.Distance do
     |> Stream.zip(vector2)
     |> Enum.reduce({0, 0}, fn {x, y}, {intersection, union} ->
       case {x, y} do
-        {x, y} when x != 0 and y != 0 and x == y ->
+        {x, y} when x == 0 or y == 0 ->
+          {intersection, union}
+        {x, y} when x == y ->
           {intersection + 1, union + 1}
-        {x, y} when x != 0 and y != 0 ->
+        _ ->
           {intersection, union + 1}
-        _ -> {intersection, union}
       end
     end)
     |> to_jaccard_distance

@@ -93,7 +93,7 @@ defmodule Numerix.DistanceTest do
     assert Distance.jaccard([], []) == 0.0
   end
 
-  test :jaccard_is_nil_when_any_vector_is_empty do
+  test :jaccard_is_nil_when_any_one_vector_is_empty do
     refute Distance.jaccard([],[1])
     refute Distance.jaccard([2],[])
   end
