@@ -20,4 +20,4 @@ Check out the [tests](https://github.com/safwank/Numerix/tree/master/test) for e
 
 ## Documentation
 
-Check out the [API reference](https://hexdocs.pm/numerix/0.0.4/api-reference.html) for the latest documentation.
+Check out the [API reference](https://hexdocs.pm/numerix/api-reference.html) for the latest documentation.
