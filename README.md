@@ -10,7 +10,7 @@ Add `numerix` to your list of dependencies in `mix.exs`:
 
 ```elixir
   def deps do
-    [{:numerix, "~> 0.0.4"}]
+    [{:numerix, "~> 0.0.5"}]
   end
 ```
 
