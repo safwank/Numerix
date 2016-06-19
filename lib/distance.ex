@@ -6,7 +6,7 @@ defmodule Numerix.Distance do
   alias Numerix.{Common, Correlation, Math}
 
   @doc """
-  Calculates the Pearson's distance between two vectors.
+  The Pearson's distance between two vectors.
   """
   @spec pearson([number], [number]) :: Common.maybe_float
   def pearson(vector1, vector2) do
@@ -17,7 +17,7 @@ defmodule Numerix.Distance do
   end
 
   @doc """
-  Calculates the Minkowski distance between two vectors.
+  The Minkowski distance between two vectors.
   """
   @spec minkowski([number], [number], integer) :: Common.maybe_float
   def minkowski(vector1, vector2, lambda \\ 3)
@@ -32,7 +32,7 @@ defmodule Numerix.Distance do
   end
 
   @doc """
-  Calculates the Euclidean distance between two vectors.
+  The Euclidean distance between two vectors.
   """
   @spec euclidean([number], [number]) :: Common.maybe_float
   def euclidean(vector1, vector2) do
@@ -40,11 +40,37 @@ defmodule Numerix.Distance do
   end
 
   @doc """
-  Calculates the Manhattan distance between two vectors.
+  The Manhattan distance between two vectors.
   """
   @spec manhattan([number], [number]) :: Common.maybe_float
   def manhattan(vector1, vector2) do
     minkowski(vector1, vector2, 1)
+  end
+
+  @doc """
+  The Jaccard distance (1 - Jaccard index) between two vectors.
+  """
+  @spec jaccard([number], [number]) :: Common.maybe_float
+  def jaccard([], []), do: 0.0
+  def jaccard([], _), do: nil
+  def jaccard(_, []), do: nil
+  def jaccard(vector1, vector2) do
+    vector1
+    |> Stream.zip(vector2)
+    |> Enum.reduce({0, 0}, fn {x, y}, {intersection, union} ->
+      case {x, y} do
+        {x, y} when x != 0 and y != 0 and x == y ->
+          {intersection + 1, union + 1}
+        {x, y} when x != 0 and y != 0 ->
+          {intersection, union + 1}
+        _ -> {intersection, union}
+      end
+    end)
+    |> to_jaccard_distance
+  end
+
+  defp to_jaccard_distance({intersection, union}) do
+    1 - (intersection / union)
   end
 
 end
