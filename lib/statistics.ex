@@ -3,10 +3,10 @@ defmodule Numerix.Statistics do
   Common statistical functions.
   """
 
-  alias Numerix.{Math, Common}
+  alias Numerix.Common
 
   @doc """
-  Calculates the average of a list of numbers.
+  The average of a list of numbers.
   """
   @spec mean([number]) :: Common.maybe_float
   def mean([]), do: nil
@@ -15,7 +15,7 @@ defmodule Numerix.Statistics do
   end
 
   @doc """
-  Returns the middle value in a list of numbers.
+  The middle value in a list of numbers.
   """
   @spec median([number]) :: Common.maybe_float
   def median([]), do: nil
@@ -25,7 +25,7 @@ defmodule Numerix.Statistics do
   end
 
   @doc """
-  Calculates the most frequent value(s) in a list.
+  The most frequent value(s) in a list.
   """
   @spec mode([number]) :: [number] | nil
   def mode([]), do: nil
@@ -45,7 +45,7 @@ defmodule Numerix.Statistics do
   end
 
   @doc """
-  Calculates the difference between the largest and smallest values in a list.
+  The difference between the largest and smallest values in a list.
   """
   @spec range([number]) :: Common.maybe_float
   def range([]), do: nil
@@ -55,32 +55,31 @@ defmodule Numerix.Statistics do
   end
 
   @doc """
-  Calculates the unbiased population variance from a sample vector.
+  The unbiased population variance from a sample.
+  It measures how far the vector is spread out from the mean.
   """
   @spec variance([number]) :: Common.maybe_float
   def variance([]), do: nil
   def variance([_x]), do: nil
   def variance(xs) do
     xs
-    |> Enum.map(fn x -> :math.pow(x - mean(xs), 2) end)
-    |> Enum.sum
-    |> Math.divide(Enum.count(xs) - 1)
+    |> sum_powered_deviations(2)
+    |> Kernel./(Enum.count(xs) - 1)
   end
 
   @doc """
-  Calculates the population variance from a full population vector.
+  The variance for a full population.
+  It measures how far the vector is spread out from the mean.
   """
   @spec population_variance([number]) :: Common.maybe_float
   def population_variance([]), do: nil
   def population_variance(xs) do
-    xs
-    |> Enum.map(fn x -> :math.pow(x - mean(xs), 2) end)
-    |> Enum.sum
-    |> Math.divide(Enum.count(xs))
+    xs |> moment(2)
   end
 
   @doc """
-  Calculates the unbiased standard deviation from a sample vector.
+  The unbiased standard deviation from a sample.
+  It measures the amount of variation of the vector.
   """
   @spec std_dev([number]) :: Common.maybe_float
   def std_dev([]), do: nil
@@ -90,7 +89,8 @@ defmodule Numerix.Statistics do
   end
 
   @doc """
-  Calculates the population standard deviation from a full population vector.
+  The standard deviation for a full population.
+  It measures the amount of variation of the vector.
   """
   @spec population_std_dev([number]) :: Common.maybe_float
   def population_std_dev([]), do: nil
@@ -99,7 +99,48 @@ defmodule Numerix.Statistics do
   end
 
   @doc """
+  The nth moment about the mean for a sample.
+  Used to calculate skewness and kurtosis.
+  """
+  @spec moment([number], pos_integer) :: Common.maybe_float
+  def moment([], _), do: nil
+  def moment(_, 1), do: 0.0
+  def moment(xs, n) do
+    xs
+    |> sum_powered_deviations(n)
+    |> Kernel./(Enum.count(xs))
+  end
+
+  @doc """
+  The sharpness of the peak of a frequency-distribution curve.
+  It defines the extent to which a distribution differs from a normal distribution.
+  Like skewness, it describes the shape of a probability distribution.
+  """
+  @spec kurtosis([number]) :: Common.maybe_float
+  def kurtosis([]), do: nil
+  def kurtosis(xs) do
+    xs
+    |> moment(4)
+    |> Kernel./(xs |> population_variance |> :math.pow(2))
+    |> Kernel.-(3)
+  end
+
+  @doc """
+  The skewness of a frequency-distribution curve.
+  It defines the extent to which a distribution differs from a normal distribution.
+  Like kurtosis, it describes the shape of a probability distribution.
+  """
+  @spec skewness([number]) :: Common.maybe_float
+  def skewness([]), do: nil
+  def skewness(xs) do
+    xs
+    |> moment(3)
+    |> Kernel./(xs |> population_variance |> :math.pow(1.5))
+  end
+
+  @doc """
   Calculates the unbiased covariance from two sample vectors.
+  It is a measure of how much the two vectors change together.
   """
   @spec covariance([number], [number]) :: Common.maybe_float
   def covariance([], _), do: nil
@@ -108,32 +149,21 @@ defmodule Numerix.Statistics do
   def covariance(_, [_y]), do: nil
   def covariance(xs, ys) when length(xs) != length(ys), do: nil
   def covariance(xs, ys) do
-    mean_x = mean(xs)
-    mean_y = mean(ys)
-
-    xs
-    |> Stream.zip(ys)
-    |> Stream.map(fn {x, y} -> (x - mean_x) * (y - mean_y) end)
-    |> Enum.sum
-    |> Math.divide(length(xs) - 1)
+    divisor = Enum.count(xs) - 1
+    do_covariance(xs, ys, divisor)
   end
 
   @doc """
   Calculates the population covariance from two full population vectors.
+  It is a measure of how much the two vectors change together.
   """
   @spec population_covariance([number], [number]) :: Common.maybe_float
   def population_covariance([], _), do: nil
   def population_covariance(_, []), do: nil
   def population_covariance(xs, ys) when length(xs) != length(ys), do: nil
   def population_covariance(xs, ys) do
-    mean_x = mean(xs)
-    mean_y = mean(ys)
-
-    xs
-    |> Stream.zip(ys)
-    |> Stream.map(fn {x, y} -> (x - mean_x) * (y - mean_y) end)
-    |> Enum.sum
-    |> Math.divide(length(xs))
+    divisor = Enum.count(xs)
+    do_covariance(xs, ys, divisor)
   end
 
   @doc """
@@ -181,7 +211,7 @@ defmodule Numerix.Statistics do
     |> Stream.zip(weights)
     |> Stream.map(fn {{x, y}, w} -> w * (x - weighted_mean1) * (y - weighted_mean2) end)
     |> Enum.sum
-    |> Math.divide(weights |> Enum.sum)
+    |> Kernel./(weights |> Enum.sum)
   end
 
   @doc """
@@ -196,7 +226,25 @@ defmodule Numerix.Statistics do
     |> Stream.zip(weights)
     |> Stream.map(fn {x, w} -> x * w end)
     |> Enum.sum
-    |> Math.divide(weights |> Enum.sum)
+    |> Kernel./(weights |> Enum.sum)
+  end
+
+  defp sum_powered_deviations(xs, n) do
+    x_mean = mean(xs)
+    xs
+    |> Enum.map(fn x -> :math.pow(x - x_mean, n) end)
+    |> Enum.sum
+  end
+
+  defp do_covariance(xs, ys, divisor) do
+    mean_x = mean(xs)
+    mean_y = mean(ys)
+
+    xs
+    |> Stream.zip(ys)
+    |> Stream.map(fn {x, y} -> (x - mean_x) * (y - mean_y) end)
+    |> Enum.sum
+    |> Kernel./(divisor)
   end
 
   defp do_quantile([head | _], _h, hf) when hf < 1, do: head

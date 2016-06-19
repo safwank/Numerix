@@ -131,6 +131,30 @@ defmodule Numerix.StatisticsTest do
     refute Statistics.population_std_dev([])
   end
 
+  test :kurtosis_is_nil_when_list_is_empty do
+    refute Statistics.kurtosis([])
+  end
+
+  test :kurtosis_is_correct_for_specific_datasets do
+    dataset1 = DataHelper.read("Lew")
+    dataset2 = DataHelper.read("Lottery")
+
+    assert_in_delta(dataset1[:data] |> Statistics.kurtosis, -1.49604979214447, 0.01)
+    assert_in_delta(dataset2[:data] |> Statistics.kurtosis, -1.19256091074856, 0.01)
+  end
+
+  test :skewness_is_nil_when_list_is_empty do
+    refute Statistics.skewness([])
+  end
+
+  test :skewness_is_correct_for_specific_datasets do
+    dataset1 = DataHelper.read("Lew")
+    dataset2 = DataHelper.read("Lottery")
+
+    assert_in_delta(dataset1[:data] |> Statistics.skewness, -0.050606638756334, 0.001)
+    assert_in_delta(dataset2[:data] |> Statistics.skewness, -0.09333165310779, 0.001)
+  end
+
   test :covariance_is_nil_when_any_list_is_empty do
     refute Statistics.covariance([], [1, 2])
     refute Statistics.covariance([1, 2], [])

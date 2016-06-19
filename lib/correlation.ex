@@ -1,5 +1,5 @@
 defmodule Numerix.Correlation do
-  alias Numerix.{Common, Math, Statistics}
+  alias Numerix.{Common, Statistics}
 
   @moduledoc """
   Statistical correlation functions between two vectors.
@@ -49,7 +49,7 @@ defmodule Numerix.Correlation do
     weighted_covariance_yy = Statistics.weighted_covariance(vector2, vector2, weights)
 
     weighted_covariance_xy
-    |> Math.divide(:math.sqrt(weighted_covariance_xx * weighted_covariance_yy))
+    |> Kernel./(weighted_covariance_xx |> Kernel.*(weighted_covariance_yy) |> :math.sqrt)
   end
 
   defp square(vector) do
