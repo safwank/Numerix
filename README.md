@@ -21,3 +21,47 @@ Check out the [tests](https://github.com/safwank/Numerix/tree/master/test) for e
 ## Documentation
 
 Check out the [API reference](https://hexdocs.pm/numerix/api-reference.html) for the latest documentation.
+
+## Features
+
+### Correlation functions
+
+* Pearson
+* Weighted Pearson
+
+### Distance functions
+
+* Pearson
+* Minkowski
+* Euclidean
+* Manhattan
+* Jaccard
+
+### General math functions
+
+* nth root
+
+### Special functions
+
+* Logit
+* Logistic
+
+### Statistics
+
+* Mean
+* Weighted mean
+* Median
+* Mode
+* Range
+* Variance
+* Population variance
+* Standard deviation
+* Population standard deviation
+* Moment
+* Kurtosis
+* Skewness
+* Covariance
+* Weighted covariance
+* Population covariance
+* Quantile
+* Percentile
