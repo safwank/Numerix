@@ -6,7 +6,7 @@ defmodule Numerix.Mixfile do
       app: :numerix,
       name: "Numerix",
       description: "A collection of (potentially) useful mathematical and statistical functions",
-      version: "0.0.6",
+      version: "0.0.7",
       elixir: "~> 1.2",
       source_url: "https://github.com/safwank/Numerix",
       deps: deps,
@@ -33,7 +33,7 @@ defmodule Numerix.Mixfile do
       {:credo, "~> 0.4.3", only: :test},
       {:dialyxir, "~> 0.3.3", only: [:dev, :test]},
       {:excoveralls, "~> 0.5.4", only: :test},
-      {:excheck, "~> 0.3.3", only: :test},
+      {:excheck, "~> 0.4.1", only: :test},
       {:triq, github: "krestenkrab/triq", only: :test},
       {:ex_doc, "~> 0.11", only: :dev},
       {:earmark, "~> 0.2.1", only: :dev}
