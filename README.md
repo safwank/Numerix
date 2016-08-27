@@ -14,6 +14,14 @@ Add `numerix` to your list of dependencies in `mix.exs`:
   end
 ```
 
+Ensure `numerix` is started before your application:
+
+```elixir
+  def application do
+    [applications: [:numerix]]
+  end
+```
+
 ## Examples
 
 Check out the [tests](https://github.com/safwank/Numerix/tree/master/test) for examples.
