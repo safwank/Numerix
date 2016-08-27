@@ -1,4 +1,4 @@
-defmodule Numerix.SpecialFunctions do
+defmodule Numerix.Special do
   @moduledoc """
   Special mathematical functions that would make Euler proud.
   """

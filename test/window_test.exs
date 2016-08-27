@@ -1,9 +1,9 @@
-defmodule Numerix.WindowFunctionsTest do
+defmodule Numerix.WindowTest do
   use ExUnit.Case, async: false
   use ExCheck
   import ListHelper
 
-  alias Numerix.WindowFunctions
+  alias Numerix.Window
 
   test :gaussian_is_correct_for_specific_examples do
     [
@@ -13,7 +13,7 @@ defmodule Numerix.WindowFunctionsTest do
       {3.0, 0.01110899653824231}
     ]
     |> Enum.each(fn {width, expected} ->
-      assert_in_delta(WindowFunctions.gaussian(width), expected, 0.0000000001)
+      assert_in_delta(Window.gaussian(width), expected, 0.0000000001)
     end)
   end
 
@@ -21,7 +21,7 @@ defmodule Numerix.WindowFunctionsTest do
     for_all {width, sigma} in {number, non_neg_integer} do
       sigma = sigma / 100
 
-      WindowFunctions.gaussian(width, sigma) |> between?(0, 1)
+      Window.gaussian(width, sigma) |> between?(0, 1)
     end
   end
 

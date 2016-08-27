@@ -1,13 +1,13 @@
-defmodule Numerix.SpecialFunctionsTest do
+defmodule Numerix.SpecialTest do
   use ExUnit.Case, async: false
   use ExCheck
   import ListHelper
 
-  alias Numerix.SpecialFunctions
+  alias Numerix.Special
 
   test :logit_is_nil_when_p_is_invalid do
-    refute SpecialFunctions.logit(-0.1)
-    refute SpecialFunctions.logit(1.1)
+    refute Special.logit(-0.1)
+    refute Special.logit(1.1)
   end
 
   test :logit_is_correct_for_specific_examples do
@@ -23,26 +23,26 @@ defmodule Numerix.SpecialFunctionsTest do
       {1.000000, :infinity}
     ]
     |> Enum.each(fn {p, expected} ->
-      assert SpecialFunctions.logit(p) == expected
+      assert Special.logit(p) == expected
     end)
   end
 
   property :logistic_is_the_inverse_of_logit do
     for_all x in int(0, 1000) do
       p = x / 1000
-      logit = SpecialFunctions.logit(p)
+      logit = Special.logit(p)
 
       if is_atom(logit) do
-        SpecialFunctions.logistic(logit) == p
+        Special.logistic(logit) == p
       else
-        assert_in_delta(SpecialFunctions.logistic(logit), p, 0.001)
+        assert_in_delta(Special.logistic(logit), p, 0.001)
       end
     end
   end
 
   property :logistic_is_between_0_and_1 do
     for_all x in number do
-      SpecialFunctions.logistic(x) |> between?(0, 1)
+      Special.logistic(x) |> between?(0, 1)
     end
   end
 
