@@ -1,6 +1,8 @@
 defmodule Numerix.DistanceTest do
   use ExUnit.Case, async: false
   use ExCheck
+  import ListHelper
+
   alias Numerix.{Distance, Correlation}
 
   test :pearson_is_nil_when_any_vector_is_empty do
@@ -11,16 +13,17 @@ defmodule Numerix.DistanceTest do
 
   property :pearson_distance_is_the_inverse_of_its_correlation do
     for_all {xs, ys} in {non_empty(list(int)), non_empty(list(int))} do
-      {xs, ys} = ListHelper.equalize_length(xs, ys)
+      {xs, ys} = equalize_length(xs, ys)
+
       Distance.pearson(xs, ys) == 1.0 - Correlation.pearson(xs, ys)
     end
   end
 
   property :pearson_distance_is_between_0_and_2 do
     for_all {xs, ys} in {non_empty(list(int)), non_empty(list(int))} do
-      {xs, ys} = ListHelper.equalize_length(xs, ys)
-      distance = Distance.pearson(xs, ys)
-      distance >= 0 and distance <= 2
+      {xs, ys} = equalize_length(xs, ys)
+
+      Distance.pearson(xs, ys) |> between?(0, 2)
     end
   end
 
@@ -113,9 +116,7 @@ defmodule Numerix.DistanceTest do
 
   property :jaccard_is_between_0_and_1 do
     for_all {xs, ys} in {non_empty(list(non_neg_integer)), non_empty(list(non_neg_integer))} do
-      distance = Distance.jaccard(xs, ys)
-
-      distance >= 0 and distance <= 1
+      Distance.jaccard(xs, ys) |> between?(0, 1)
     end
   end
 

@@ -1,6 +1,8 @@
 defmodule Numerix.StatisticsTest do
   use ExUnit.Case, async: false
   use ExCheck
+  import ListHelper
+
   alias Numerix.Statistics
 
   test :mean_is_nil_when_list_is_empty do
@@ -17,8 +19,7 @@ defmodule Numerix.StatisticsTest do
 
   property :mean_is_between_mix_and_max do
     for_all xs in non_empty(list(number)) do
-      mean = Statistics.mean(xs)
-      mean >= Enum.min(xs) and mean <= Enum.max(xs)
+      Statistics.mean(xs) |> between?(Enum.min(xs), Enum.max(xs))
     end
   end
 
@@ -37,8 +38,7 @@ defmodule Numerix.StatisticsTest do
 
   property :median_is_between_mix_and_max do
     for_all xs in non_empty(list(number)) do
-      median = Statistics.median(xs)
-      median >= Enum.min(xs) and median <= Enum.max(xs)
+      Statistics.median(xs) |> between?(Enum.min(xs), Enum.max(xs))
     end
   end
 
@@ -180,7 +180,8 @@ defmodule Numerix.StatisticsTest do
     for_all {xs, ys} in such_that({xxs, yys} in {non_empty(list(number)), non_empty(list(number))}
       when length(xxs) > 1 and length(yys) > 1) do
 
-      {xs, ys} = ListHelper.equalize_length(xs, ys)
+      {xs, ys} = equalize_length(xs, ys)
+
       Statistics.covariance(xs, ys) == Statistics.covariance(ys, xs)
     end
   end
@@ -205,7 +206,8 @@ defmodule Numerix.StatisticsTest do
     for_all {xs, ys} in such_that({xxs, yys} in {non_empty(list(number)), non_empty(list(number))}
       when length(xxs) > 1 and length(yys) > 1) do
 
-      {xs, ys} = ListHelper.equalize_length(xs, ys)
+      {xs, ys} = equalize_length(xs, ys)
+
       Statistics.population_covariance(xs, ys) == Statistics.population_covariance(ys, xs)
     end
   end
@@ -224,8 +226,7 @@ defmodule Numerix.StatisticsTest do
       tau = tau / 100
       {minimum, maximum} = Enum.min_max(xs)
 
-      quantile = Statistics.quantile(xs, tau)
-      quantile >= minimum and quantile <= maximum
+      Statistics.quantile(xs, tau) |> between?(minimum, maximum)
     end
   end
 
@@ -252,8 +253,7 @@ defmodule Numerix.StatisticsTest do
     for_all {xs, p} in {non_empty(list(number)), int(0, 100)} do
       {minimum, maximum} = Enum.min_max(xs)
 
-      percentile = Statistics.percentile(xs, p)
-      percentile >= minimum and percentile <= maximum
+      Statistics.percentile(xs, p) |> between?(minimum, maximum)
     end
   end
 

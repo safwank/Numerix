@@ -1,6 +1,8 @@
 defmodule Numerix.CorrelationTest do
   use ExUnit.Case, async: false
   use ExCheck
+  import ListHelper
+
   alias Numerix.Correlation
 
   test :pearson_is_nil_when_any_vector_is_empty do
@@ -12,6 +14,7 @@ defmodule Numerix.CorrelationTest do
   property :pearson_correlation_is_zero_when_the_vectors_are_equal_but_variance_is_zero do
     for_all {x, len} in {int, pos_integer} do
       xs = [x] |> Stream.cycle |> Enum.take(len)
+
       Correlation.pearson(xs, xs) == 0.0
     end
   end
@@ -26,9 +29,9 @@ defmodule Numerix.CorrelationTest do
 
   property :pearson_correlation_is_between_minus_1_and_1 do
     for_all {xs, ys} in {non_empty(list(int)), non_empty(list(int))} do
-      {xs, ys} = ListHelper.equalize_length(xs, ys)
-      distance = Correlation.pearson(xs, ys)
-      distance >= -1 and distance <= 1
+      {xs, ys} = equalize_length(xs, ys)
+
+      Correlation.pearson(xs, ys) |> between?(-1, 1)
     end
   end
 

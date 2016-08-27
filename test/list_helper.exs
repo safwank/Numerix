@@ -14,4 +14,8 @@ defmodule ListHelper do
     {Enum.take(xs, min_length), Enum.take(ys, min_length)}
   end
 
+  def between?(value, minimum, maximum) do
+    value >= minimum and value <= maximum
+  end
+
 end

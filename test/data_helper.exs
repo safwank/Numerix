@@ -7,7 +7,8 @@ defmodule DataHelper do
 
   defp parse_std_dev(lines) do
     lines
-    |> Enum.find(fn line -> String.contains?(line, "Sample Standard Deviation") end)
+    |> Stream.filter(fn line -> String.contains?(line, "Sample Standard Deviation") end)
+    |> Enum.at(0)
     |> String.split(":")
     |> List.last
     |> String.strip

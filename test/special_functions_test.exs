@@ -1,6 +1,8 @@
 defmodule Numerix.SpecialFunctionsTest do
   use ExUnit.Case, async: false
   use ExCheck
+  import ListHelper
+
   alias Numerix.SpecialFunctions
 
   test :logit_is_nil_when_p_is_invalid do
@@ -40,9 +42,7 @@ defmodule Numerix.SpecialFunctionsTest do
 
   property :logistic_is_between_0_and_1 do
     for_all x in number do
-      logistic = SpecialFunctions.logistic(x)
-
-      logistic >= 0 and logistic <= 1
+      SpecialFunctions.logistic(x) |> between?(0, 1)
     end
   end
 
