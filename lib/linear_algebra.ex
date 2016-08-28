@@ -4,11 +4,12 @@ defmodule Numerix.LinearAlgebra do
   matrix factorization and matrix transformation.
   """
 
-  alias Numerix.Math
+  alias Numerix.{Common, Math}
 
   @doc """
   The sum of the products of two vectors.
   """
+  @spec dot_product([number], [number]) :: Common.maybe_float
   def dot_product(vector1, vector2) do
     vector1
     |> multiply(vector2)
@@ -18,6 +19,7 @@ defmodule Numerix.LinearAlgebra do
   @doc """
   The L1 norm of a vector, also known as Manhattan norm.
   """
+  @spec l1_norm(Common.maybe_vector) :: Common.maybe_float
   def l1_norm(vector) do
     1 |> norm(vector)
   end
@@ -25,6 +27,7 @@ defmodule Numerix.LinearAlgebra do
   @doc """
   The L2 norm of a vector, also known as Euclidean norm.
   """
+  @spec l2_norm(Common.maybe_vector) :: Common.maybe_float
   def l2_norm(vector) do
     2 |> norm(vector)
   end
@@ -32,8 +35,8 @@ defmodule Numerix.LinearAlgebra do
   @doc """
   The p-norm of a vector.
   """
+  @spec norm(integer, Common.maybe_vector) :: Common.maybe_float
   def norm(_p, nil), do: nil
-  def norm(_p, []), do: nil
   def norm(p, vector) do
     vector
     |> Stream.map(fn x ->
@@ -47,23 +50,25 @@ defmodule Numerix.LinearAlgebra do
   Subtracts a vector from another.
   Returns a stream of the differences.
   """
+  @spec subtract([number], [number]) :: Common.maybe_vector
   def subtract(vector1, vector2) do
     fn(x, y) -> x - y end
-    |> operate(vector1, vector2)
+    |> vec_apply(vector1, vector2)
   end
 
   @doc """
   Multiplies a vector with another.
   Returns a stream of the products.
   """
+  @spec multiply([number], [number]) :: Common.maybe_vector
   def multiply(vector1, vector2) do
     fn(x, y) -> x * y end
-    |> operate(vector1, vector2)
+    |> vec_apply(vector1, vector2)
   end
 
-  defp operate(_fun, [], _), do: nil
-  defp operate(_fun, _, []), do: nil
-  defp operate(fun, vector1, vector2) do
+  defp vec_apply(_fun, [], _), do: nil
+  defp vec_apply(_fun, _, []), do: nil
+  defp vec_apply(fun, vector1, vector2) do
     vector1
     |> Stream.zip(vector2)
     |> Stream.map(fn {x, y} -> fun.(x, y) end)

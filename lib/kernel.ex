@@ -3,6 +3,9 @@ defmodule Numerix.Kernel do
   Functions used as kernel methods for classification, regression and clustering.
   """
 
+  import Numerix.LinearAlgebra
+  alias Numerix.Common
+
   @doc """
   Radial basis function used to approximate given functions.
   It is particularly useful for time series prediction and
@@ -10,11 +13,11 @@ defmodule Numerix.Kernel do
   simple single-layer type of artificial neural network where
   the function acts as the activation function for the network.
   """
+  @spec rbf([number], [number], integer) :: Common.maybe_float
   def rbf(vector1, vector2, gamma \\ 10) do
     vector1
-    |> Stream.zip(vector2)
-    |> Stream.map(fn {x, y} -> x - y end)
-    |> Stream.map(fn x -> :math.pow(x, 2) end)
+    |> subtract(vector2)
+    |> Stream.map(&:math.pow(&1, 2))
     |> Enum.sum
     |> to_sum(gamma)
   end

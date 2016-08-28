@@ -18,4 +18,9 @@ defmodule Numerix.Common do
   """
   @type maybe_float :: float | nil
 
+  @typedoc """
+  Something that may be a vector.
+  """
+  @type maybe_vector :: [number] | nil
+
 end

@@ -1,9 +1,9 @@
 defmodule Numerix.LinearAlgebraTest do
   use ExUnit.Case, async: false
 
-  alias Numerix.LinearAlgebra
+  import Numerix.LinearAlgebra
 
   test "dot product is correct for a specific example" do
-    assert LinearAlgebra.dot_product([1, 2, 3], [4, 5, 6]) == 32
+    assert [1, 2, 3] |> dot_product([4, 5, 6]) == 32
   end
 end
