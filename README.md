@@ -2,7 +2,7 @@
 
 # Numerix
 
-A collection of useful mathematical in Elixir, with a slant towards statistics, linear algebra and machine learning.
+A collection of useful mathematical functions in Elixir, with a slant towards statistics, linear algebra and machine learning.
 
 ## Installation
 
