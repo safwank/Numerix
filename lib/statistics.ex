@@ -232,7 +232,7 @@ defmodule Numerix.Statistics do
   defp sum_powered_deviations(xs, n) do
     x_mean = mean(xs)
     xs
-    |> Enum.map(fn x -> :math.pow(x - x_mean, n) end)
+    |> Stream.map(fn x -> :math.pow(x - x_mean, n) end)
     |> Enum.sum
   end
 

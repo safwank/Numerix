@@ -2,7 +2,7 @@
 
 # Numerix
 
-A collection of (potentially) useful mathematical functions. At the moment it has a number of distance and correlation functions. The plan is to implement other special functions, statistics, probability distributions, maybe even machine learning algorithms.
+A collection of useful mathematical in Elixir, with a slant towards statistics, linear algebra and machine learning.
 
 ## Installation
 
@@ -10,7 +10,7 @@ Add `numerix` to your list of dependencies in `mix.exs`:
 
 ```elixir
   def deps do
-    [{:numerix, "~> 0.0.6"}]
+    [{:numerix, "~> 0.1.0"}]
   end
 ```
 
@@ -31,6 +31,26 @@ Check out the [tests](https://github.com/safwank/Numerix/tree/master/test) for e
 Check out the [API reference](https://hexdocs.pm/numerix/api-reference.html) for the latest documentation.
 
 ## Features
+
+### Statistics
+
+* Mean
+* Weighted mean
+* Median
+* Mode
+* Range
+* Variance
+* Population variance
+* Standard deviation
+* Population standard deviation
+* Moment
+* Kurtosis
+* Skewness
+* Covariance
+* Weighted covariance
+* Population covariance
+* Quantile
+* Percentile
 
 ### Correlation functions
 
@@ -54,22 +74,18 @@ Check out the [API reference](https://hexdocs.pm/numerix/api-reference.html) for
 * Logit
 * Logistic
 
-### Statistics
+### Window functions
 
-* Mean
-* Weighted mean
-* Median
-* Mode
-* Range
-* Variance
-* Population variance
-* Standard deviation
-* Population standard deviation
-* Moment
-* Kurtosis
-* Skewness
-* Covariance
-* Weighted covariance
-* Population covariance
-* Quantile
-* Percentile
+* Gaussian
+
+### Linear algebra
+
+* Dot product
+* L1-norm
+* L2-norm
+* p-norm
+* Vector subtraction and multiplication
+
+### Kernel functions
+
+* RBF

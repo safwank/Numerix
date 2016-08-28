@@ -1,9 +1,10 @@
 defmodule Numerix.Correlation do
-  alias Numerix.{Common, Statistics}
-
   @moduledoc """
   Statistical correlation functions between two vectors.
   """
+
+  import Numerix.LinearAlgebra
+  alias Numerix.{Common, Statistics}
 
   @doc """
   Calculates the Pearson correlation coefficient between two vectors.
@@ -14,21 +15,15 @@ defmodule Numerix.Correlation do
   def pearson(vector1, vector2) do
     sum1 = vector1 |> Enum.sum
     sum2 = vector2 |> Enum.sum
-
     sum_of_squares1 = vector1 |> square |> Enum.sum
     sum_of_squares2 = vector2 |> square |> Enum.sum
-
-    sum_of_products =
-      vector1
-      |> Stream.zip(vector2)
-      |> Stream.map(fn {x, y} -> x * y end)
-      |> Enum.sum
+    sum_of_products = vector1 |> dot_product(vector2)
 
     size = length(vector1)
     num = sum_of_products - (sum1 * sum2 / size)
-    density = :math.sqrt(
-      (sum_of_squares1 - :math.pow(sum1, 2) / size)
-      * (sum_of_squares2 - :math.pow(sum2, 2) / size))
+    density = (sum_of_squares1 - :math.pow(sum1, 2) / size)
+      |> Kernel.*(sum_of_squares2 - :math.pow(sum2, 2) / size)
+      |> :math.sqrt
 
     case density do
       0.0 -> 0.0
