@@ -6,7 +6,7 @@ defmodule Numerix.Mixfile do
       app: :numerix,
       name: "Numerix",
       description: "A collection of (potentially) useful mathematical and statistical functions",
-      version: "0.0.7",
+      version: "0.1.0",
       elixir: "~> 1.2",
       source_url: "https://github.com/safwank/Numerix",
       deps: deps,

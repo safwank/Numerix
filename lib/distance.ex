@@ -3,7 +3,8 @@ defmodule Numerix.Distance do
   Distance functions between two vectors.
   """
 
-  alias Numerix.{Common, Correlation, Math}
+  import Numerix.LinearAlgebra
+  alias Numerix.{Common, Correlation}
 
   @doc """
   The Pearson's distance between two vectors.
@@ -20,15 +21,8 @@ defmodule Numerix.Distance do
   The Minkowski distance between two vectors.
   """
   @spec minkowski([number], [number], integer) :: Common.maybe_float
-  def minkowski(vector1, vector2, lambda \\ 3)
-  def minkowski([], _, _lambda), do: nil
-  def minkowski(_, [], _lambda), do: nil
-  def minkowski(vector1, vector2, lambda) do
-    vector1
-    |> Stream.zip(vector2)
-    |> Stream.map(fn {x, y} -> :math.pow(abs(x - y), lambda) end)
-    |> Enum.sum
-    |> Math.nth_root(lambda)
+  def minkowski(vector1, vector2, p \\ 3) do
+    p |> norm(vector1 |> subtract(vector2))
   end
 
   @doc """
@@ -36,7 +30,9 @@ defmodule Numerix.Distance do
   """
   @spec euclidean([number], [number]) :: Common.maybe_float
   def euclidean(vector1, vector2) do
-    minkowski(vector1, vector2, 2)
+    vector1
+    |> subtract(vector2)
+    |> l2_norm
   end
 
   @doc """
@@ -44,7 +40,9 @@ defmodule Numerix.Distance do
   """
   @spec manhattan([number], [number]) :: Common.maybe_float
   def manhattan(vector1, vector2) do
-    minkowski(vector1, vector2, 1)
+    vector1
+    |> subtract(vector2)
+    |> l1_norm
   end
 
   @doc """
