@@ -1,6 +1,7 @@
 defmodule Numerix.LinearAlgebra do
   @moduledoc """
-  Linear algebra functions used for matrix factorization and transformation.
+  Linear algebra functions used for vector operations,
+  matrix factorization and matrix transformation.
   """
 
   alias Numerix.Math
@@ -10,8 +11,7 @@ defmodule Numerix.LinearAlgebra do
   """
   def dot_product(vector1, vector2) do
     vector1
-    |> Stream.zip(vector2)
-    |> Stream.map(fn {x, y} -> x * y end)
+    |> multiply(vector2)
     |> Enum.sum
   end
 
@@ -45,13 +45,27 @@ defmodule Numerix.LinearAlgebra do
 
   @doc """
   Subtracts a vector from another.
-  Returns a stream of the difference.
+  Returns a stream of the differences.
   """
-  def subtract([], _), do: nil
-  def subtract(_, []), do: nil
   def subtract(vector1, vector2) do
+    fn(x, y) -> x - y end
+    |> operate(vector1, vector2)
+  end
+
+  @doc """
+  Multiplies a vector with another.
+  Returns a stream of the products.
+  """
+  def multiply(vector1, vector2) do
+    fn(x, y) -> x * y end
+    |> operate(vector1, vector2)
+  end
+
+  defp operate(_fun, [], _), do: nil
+  defp operate(_fun, _, []), do: nil
+  defp operate(fun, vector1, vector2) do
     vector1
     |> Stream.zip(vector2)
-    |> Stream.map(fn {x, y} -> x - y end)
+    |> Stream.map(fn {x, y} -> fun.(x, y) end)
   end
 end
