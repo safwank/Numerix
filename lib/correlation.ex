@@ -50,5 +50,4 @@ defmodule Numerix.Correlation do
   defp square(vector) do
     vector |> Enum.map(&:math.pow(&1, 2))
   end
-
 end

@@ -5,6 +5,50 @@ defmodule Numerix.DistanceTest do
 
   alias Numerix.{Distance, Correlation}
 
+  test "MSE is correct for a specific example" do
+    vector1 = [12, 15, 20, 22, 24]
+    vector2 = [13, 17, 18, 20, 24]
+    assert Distance.mse(vector1, vector2) == 2.6
+  end
+
+  property "MSE is zero when the vectors are equal" do
+    for_all xs in non_empty(list(number)) do
+      Distance.mse(xs, xs) == 0
+    end
+  end
+
+  property "MSE is not zero when the vectors are different" do
+    for_all {xs, ys} in {non_empty(list(int)), non_empty(list(int))} do
+      {xs, ys} = equalize_length(xs, ys)
+
+      implies xs != ys do
+        Distance.mse(xs, ys) != 0
+      end
+    end
+  end
+
+  test "RMSE is correct for a specific example" do
+    vector1 = [7, 10, 12, 10, 10, 8, 7, 8, 11, 13, 10, 8]
+    vector2 = [6, 10, 14, 16, 7, 5, 5, 13, 12, 13, 8, 5]
+    assert Distance.rmse(vector1, vector2) == 2.9154759474226504
+  end
+
+  property "RMSE is zero when the vectors are equal" do
+    for_all xs in non_empty(list(number)) do
+      Distance.rmse(xs, xs) == 0
+    end
+  end
+
+  property "RMSE is not zero when the vectors are different" do
+    for_all {xs, ys} in {non_empty(list(int)), non_empty(list(int))} do
+      {xs, ys} = equalize_length(xs, ys)
+
+      implies xs != ys do
+        Distance.rmse(xs, ys) != 0
+      end
+    end
+  end
+
   test :pearson_is_nil_when_any_vector_is_empty do
     refute Distance.pearson([],[1])
     refute Distance.pearson([2],[])

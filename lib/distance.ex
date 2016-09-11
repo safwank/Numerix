@@ -4,7 +4,33 @@ defmodule Numerix.Distance do
   """
 
   import Numerix.LinearAlgebra
-  alias Numerix.{Common, Correlation}
+  alias Numerix.{Common, Correlation, Statistics}
+
+  @doc """
+  Mean squared error, the average of the squares of the errors
+  betwen two vectors, i.e. the difference between predicted
+  and actual values.
+  """
+  @spec mse([number], [number]) :: Common.maybe_float
+  def mse(vector1, vector2) do
+    vector1
+    |> subtract(vector2)
+    |> Enum.map(&:math.pow(&1, 2))
+    |> Statistics.mean
+  end
+
+  @doc """
+  Root mean square error of two vectors, or simply the
+  square root of mean squared error of the same set of
+  values. It is a measure of the differences between
+  predicted and actual values.
+  """
+  @spec rmse([number], [number]) :: Common.maybe_float
+  def rmse(vector1, vector2) do
+    vector1
+    |> mse(vector2)
+    |> :math.sqrt
+  end
 
   @doc """
   The Pearson's distance between two vectors.
@@ -71,5 +97,4 @@ defmodule Numerix.Distance do
   defp to_jaccard_distance({intersection, union}) do
     1 - (intersection / union)
   end
-
 end
