@@ -11,6 +11,10 @@ defmodule Numerix.CorrelationTest do
     refute Correlation.pearson([],[])
   end
 
+  test :pearson_is_nil_when_the_vectors_are_not_the_same_size do
+    refute Correlation.pearson([1,2,3], [4,5,6,7])
+  end
+
   property :pearson_correlation_is_zero_when_the_vectors_are_equal_but_variance_is_zero do
     for_all {x, len} in {int, pos_integer} do
       xs = [x] |> Stream.cycle |> Enum.take(len)

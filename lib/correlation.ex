@@ -12,6 +12,7 @@ defmodule Numerix.Correlation do
   @spec pearson([number], [number]) :: Common.maybe_float
   def pearson([], _), do: nil
   def pearson(_, []), do: nil
+  def pearson(vector1, vector2) when length(vector1) != length(vector2), do: nil
   def pearson(vector1, vector2) do
     sum1 = vector1 |> Enum.sum
     sum2 = vector2 |> Enum.sum
