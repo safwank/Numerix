@@ -59,6 +59,8 @@ Check out the [API reference](https://hexdocs.pm/numerix/api-reference.html) for
 
 ### Distance functions
 
+* Mean squared error (MSE)
+* Root mean square error (RMSE)
 * Pearson
 * Minkowski
 * Euclidean
@@ -85,6 +87,12 @@ Check out the [API reference](https://hexdocs.pm/numerix/api-reference.html) for
 * L2-norm
 * p-norm
 * Vector subtraction and multiplication
+
+### Linear regression
+
+* Least squares best fit
+* Prediction
+* R-squared
 
 ### Kernel functions
 
