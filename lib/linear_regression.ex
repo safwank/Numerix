@@ -27,6 +27,16 @@ defmodule Numerix.LinearRegression do
   end
 
   @doc """
+  Estimates a response `y` given a predictor `x`
+  and a set of predictors and responses, i.e.
+  it calculates `y` in `y:x↦a+bx`.
+  """
+  def predict(x, xs, ys) do
+    {intercept, slope} = fit(xs, ys)
+    intercept + slope * x
+  end
+
+  @doc """
   Measures how close the observed data are to
   the fitted regression line, i.e. how accurate
   the prediction is given the actual data.

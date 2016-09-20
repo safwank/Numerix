@@ -21,6 +21,13 @@ defmodule Numerix.LinearRegressionTest do
     assert_in_delta(slope, 3.19383, 0.00001)
   end
 
+  test "predict is correct for a specific example" do
+    predictors = [1, 2.3, 3.1, 4.8, 5.6, 6.3]
+    responses = [2.6, 2.8, 3.1, 4.7, 5.1, 5.3]
+
+    assert predict(3.5, predictors, responses) == 3.7288688355893296
+  end
+
   property "R^2 is between 0 and 1" do
     for_all {xs, ys} in {non_empty(list(int)), non_empty(list(int))} do
       {xs, ys} = equalize_length(xs, ys)
