@@ -5,6 +5,7 @@ defmodule Numerix.LinearAlgebra do
   """
 
   alias Numerix.{Common, Math}
+  alias Experimental.Flow
 
   @doc """
   The sum of the products of two vectors.
@@ -39,9 +40,13 @@ defmodule Numerix.LinearAlgebra do
   def norm(_p, nil), do: nil
   def norm(p, vector) do
     vector
-    |> Stream.map(fn x ->
+    |> Flow.from_enumerable
+    |> Flow.map(fn x ->
       abs(x) |> :math.pow(p)
     end)
+    |> Flow.partition
+    |> Flow.reduce(fn -> 0 end, & &1 + &2)
+    |> Flow.emit(:state)
     |> Enum.sum
     |> Math.nth_root(p)
   end
@@ -71,6 +76,7 @@ defmodule Numerix.LinearAlgebra do
   defp vec_apply(fun, vector1, vector2) do
     vector1
     |> Stream.zip(vector2)
-    |> Stream.map(fn {x, y} -> fun.(x, y) end)
+    |> Flow.from_enumerable
+    |> Flow.map(fn {x, y} -> fun.(x, y) end)
   end
 end

@@ -4,7 +4,9 @@ defmodule Numerix.Correlation do
   """
 
   import Numerix.LinearAlgebra
+  
   alias Numerix.{Common, Statistics}
+  alias Experimental.Flow
 
   @doc """
   Calculates the Pearson correlation coefficient between two vectors.
@@ -49,6 +51,8 @@ defmodule Numerix.Correlation do
   end
 
   defp square(vector) do
-    vector |> Enum.map(&:math.pow(&1, 2))
+    vector
+    |> Flow.from_enumerable
+    |> Flow.map(&:math.pow(&1, 2))
   end
 end

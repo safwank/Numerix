@@ -4,7 +4,9 @@ defmodule Numerix.Kernel do
   """
 
   import Numerix.LinearAlgebra
+
   alias Numerix.Common
+  alias Experimental.Flow
 
   @doc """
   Radial basis function used to approximate given functions.
@@ -17,7 +19,8 @@ defmodule Numerix.Kernel do
   def rbf(vector1, vector2, gamma \\ 10) do
     vector1
     |> subtract(vector2)
-    |> Stream.map(&:math.pow(&1, 2))
+    |> Flow.from_enumerable
+    |> Flow.map(&:math.pow(&1, 2))
     |> Enum.sum
     |> to_sum(gamma)
   end

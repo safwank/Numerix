@@ -4,7 +4,9 @@ defmodule Numerix.Distance do
   """
 
   import Numerix.LinearAlgebra
+
   alias Numerix.{Common, Correlation, Statistics}
+  alias Experimental.Flow
 
   @doc """
   Mean squared error, the average of the squares of the errors
@@ -15,7 +17,8 @@ defmodule Numerix.Distance do
   def mse(vector1, vector2) do
     vector1
     |> subtract(vector2)
-    |> Enum.map(&:math.pow(&1, 2))
+    |> Flow.from_enumerable
+    |> Flow.map(&:math.pow(&1, 2))
     |> Statistics.mean
   end
 

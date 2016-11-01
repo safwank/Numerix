@@ -4,6 +4,7 @@ defmodule Numerix.Statistics do
   """
 
   alias Numerix.Common
+  alias Experimental.Flow
 
   @doc """
   The average of a list of numbers.
@@ -38,9 +39,12 @@ defmodule Numerix.Statistics do
 
     case max_count do
       1 -> nil
-      _ -> counts
-           |> Enum.filter_map(fn {_x, count} -> count == max_count end,
-                              fn {x, _count} -> x end)
+      _ ->
+        counts
+        |> Flow.from_enumerable
+        |> Flow.filter_map(fn {_x, count} -> count == max_count end,
+                           fn {x, _count} -> x end)
+        |> Enum.to_list
     end
   end
 
@@ -209,7 +213,8 @@ defmodule Numerix.Statistics do
     xs
     |> Stream.zip(ys)
     |> Stream.zip(weights)
-    |> Stream.map(fn {{x, y}, w} -> w * (x - weighted_mean1) * (y - weighted_mean2) end)
+    |> Flow.from_enumerable
+    |> Flow.map(fn {{x, y}, w} -> w * (x - weighted_mean1) * (y - weighted_mean2) end)
     |> Enum.sum
     |> Kernel./(weights |> Enum.sum)
   end
@@ -224,7 +229,8 @@ defmodule Numerix.Statistics do
   def weighted_mean(xs, weights) do
     xs
     |> Stream.zip(weights)
-    |> Stream.map(fn {x, w} -> x * w end)
+    |> Flow.from_enumerable
+    |> Flow.map(fn {x, w} -> x * w end)
     |> Enum.sum
     |> Kernel./(weights |> Enum.sum)
   end
@@ -232,7 +238,8 @@ defmodule Numerix.Statistics do
   defp sum_powered_deviations(xs, n) do
     x_mean = mean(xs)
     xs
-    |> Stream.map(fn x -> :math.pow(x - x_mean, n) end)
+    |> Flow.from_enumerable
+    |> Flow.map(fn x -> :math.pow(x - x_mean, n) end)
     |> Enum.sum
   end
 
@@ -242,7 +249,8 @@ defmodule Numerix.Statistics do
 
     xs
     |> Stream.zip(ys)
-    |> Stream.map(fn {x, y} -> (x - mean_x) * (y - mean_y) end)
+    |> Flow.from_enumerable
+    |> Flow.map(fn {x, y} -> (x - mean_x) * (y - mean_y) end)
     |> Enum.sum
     |> Kernel./(divisor)
   end
@@ -252,5 +260,4 @@ defmodule Numerix.Statistics do
   defp do_quantile(xs, h, hf) do
     (Enum.at(xs, hf - 1)) + (h - hf) * (Enum.at(xs, hf) - Enum.at(xs, hf - 1))
   end
-
 end

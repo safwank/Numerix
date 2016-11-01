@@ -17,5 +17,4 @@ defmodule Numerix.Math do
 
   defp fixed_point(_, guess, tolerance, next) when abs(guess - next) < tolerance, do: next
   defp fixed_point(f, _, tolerance, next), do: fixed_point(f, next, tolerance, f.(next))
-
 end

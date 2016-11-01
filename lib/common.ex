@@ -22,5 +22,4 @@ defmodule Numerix.Common do
   Something that may be a vector.
   """
   @type maybe_vector :: [number] | nil
-
 end

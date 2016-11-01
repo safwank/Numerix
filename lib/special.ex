@@ -19,6 +19,8 @@ defmodule Numerix.Special do
 
   @doc """
   Calculates the sigmoidal logistic function, a common "S" shape.
+  It is the inverse of the natural logit function and so can be
+  used to convert the logarithm of odds into a probability.
   """
   @spec logistic(Common.extended_number) :: float
   def logistic(:negative_infinity), do: 0.0
@@ -26,5 +28,4 @@ defmodule Numerix.Special do
   def logistic(p) do
     1 / (:math.exp(-p) + 1)
   end
-
 end
