@@ -22,7 +22,7 @@ defmodule Numerix.Correlation do
     sum_of_squares2 = vector2 |> square |> Enum.sum
     sum_of_products = vector1 |> dot_product(vector2)
 
-    size = length(vector1)
+    size = vector1 |> Enum.count
     num = sum_of_products - (sum1 * sum2 / size)
     density = (sum_of_squares1 - :math.pow(sum1, 2) / size)
       |> Kernel.*(sum_of_squares2 - :math.pow(sum2, 2) / size)
