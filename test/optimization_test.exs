@@ -8,10 +8,10 @@ defmodule Numerix.OptimizationTest do
   property "genetic optimization returns the solution with the lowest cost" do
     cost_fun = fn(x) -> Enum.sum(x) end
 
-    for_all {x, y} in such_that({xx, yy} in {non_neg_integer, non_neg_integer} when xx < yy) do
-      domain = [x..y] |> Stream.cycle |> Enum.take(10)
+    for_all {min, max, count} in such_that({min_, max_, _} in {non_neg_integer, non_neg_integer, non_neg_integer} when min_ < max_) do
+      domain = [min..max] |> Stream.cycle |> Enum.take(count)
 
-      genetic(domain, cost_fun) == [x] |> Stream.cycle |> Enum.take(10)
+      genetic(domain, cost_fun) == [min] |> Stream.cycle |> Enum.take(count)
     end
   end
 end
