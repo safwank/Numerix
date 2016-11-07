@@ -10,7 +10,7 @@ Add `numerix` to your list of dependencies in `mix.exs`:
 
 ```elixir
   def deps do
-    [{:numerix, "~> 0.3.0"}]
+    [{:numerix, "~> 0.4.0"}]
   end
 ```
 
@@ -97,3 +97,8 @@ Check out the [API reference](https://hexdocs.pm/numerix/api-reference.html) for
 ### Kernel functions
 
 * RBF
+
+### Optimization
+
+* Genetic algorithms
+
