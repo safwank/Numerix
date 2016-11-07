@@ -3,7 +3,7 @@ defmodule Numerix.Optimization do
   Optimization algorithms to select the best element from a set of possible solutions.
   """
 
-  @default_opts [population_size: 50, mutation_prob: 0.2, elite_fraction: 0.2, iterations: 50]
+  @default_opts [population_size: 50, mutation_prob: 0.2, elite_fraction: 0.2, iterations: 100]
 
   @doc """
   Genetic algorithm to find the solution with the lowest cost where `domain` is
