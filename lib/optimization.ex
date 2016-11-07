@@ -12,10 +12,10 @@ defmodule Numerix.Optimization do
 
   Example
 
-    iex> domain = [0..9] |> Stream.cycle |> Enum.take(10)
-    iex> cost_fun = fn(x) -> Enum.sum(x) end
-    iex> Numerix.Optimize.genetic(domain, cost_fun)
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      iex> domain = [0..9] |> Stream.cycle |> Enum.take(10)
+      iex> cost_fun = fn(x) -> Enum.sum(x) end
+      iex> Numerix.Optimize.genetic(domain, cost_fun)
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
   ## Options
     * `:population_size` - the size of population to draw the solutions from
