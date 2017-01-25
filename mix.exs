@@ -37,7 +37,7 @@ defmodule Numerix.Mixfile do
       {:triq, github: "triqng/triq", only: :test},
       {:ex_doc, "~> 0.11", only: :dev},
       {:earmark, "~> 0.2", only: :dev},
-      {:gen_stage, "~> 0.8"}
+      {:flow, "~> 0.11"}
     ]
   end
 

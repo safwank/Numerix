@@ -6,7 +6,6 @@ defmodule Numerix.Correlation do
   import Numerix.LinearAlgebra
 
   alias Numerix.{Common, Statistics}
-  alias Experimental.Flow
 
   @doc """
   Calculates the Pearson correlation coefficient between two vectors.

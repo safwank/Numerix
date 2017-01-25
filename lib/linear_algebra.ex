@@ -5,7 +5,6 @@ defmodule Numerix.LinearAlgebra do
   """
 
   alias Numerix.{Common, Math}
-  alias Experimental.Flow
 
   @doc """
   The sum of the products of two vectors.
@@ -78,5 +77,6 @@ defmodule Numerix.LinearAlgebra do
     |> Stream.zip(vector2)
     |> Flow.from_enumerable
     |> Flow.map(fn {x, y} -> fun.(x, y) end)
+    |> Stream.into([])
   end
 end
