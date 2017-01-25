@@ -4,7 +4,6 @@ defmodule Numerix.Statistics do
   """
 
   alias Numerix.Common
-  alias Experimental.Flow
 
   @doc """
   The average of a list of numbers.

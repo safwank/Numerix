@@ -6,7 +6,6 @@ defmodule Numerix.Distance do
   import Numerix.LinearAlgebra
 
   alias Numerix.{Common, Correlation, Statistics}
-  alias Experimental.Flow
 
   @doc """
   Mean squared error, the average of the squares of the errors

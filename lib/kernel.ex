@@ -6,7 +6,6 @@ defmodule Numerix.Kernel do
   import Numerix.LinearAlgebra
 
   alias Numerix.Common
-  alias Experimental.Flow
 
   @doc """
   Radial basis function used to approximate given functions.
