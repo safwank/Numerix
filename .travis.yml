@@ -6,7 +6,5 @@ otp_release:
 cache:
   directories:
     - .plts
-before_script:
-  - "[[ -f .plts/local.plt ]] || mix dialyzer.plt"
 script:
   - "mix"
