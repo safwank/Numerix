@@ -30,13 +30,13 @@ defmodule Numerix.Mixfile do
 
   defp deps do
     [
-      {:credo, "~> 0.4", only: [:dev, :test]},
-      {:dialyxir, "~> 0.3", only: [:dev, :test]},
-      {:excoveralls, "~> 0.5", only: :test},
+      {:credo, "~> 0.6", only: [:dev, :test]},
+      {:dialyxir, "~> 0.4", only: [:dev, :test]},
+      {:excoveralls, "~> 0.6", only: :test},
       {:excheck, "~> 0.5", only: :test},
       {:triq, github: "triqng/triq", only: :test},
-      {:ex_doc, "~> 0.11", only: :dev},
-      {:earmark, "~> 0.2", only: :dev},
+      {:ex_doc, "~> 0.14", only: :dev},
+      {:earmark, "~> 1.1", only: :dev},
       {:flow, "~> 0.11"}
     ]
   end
