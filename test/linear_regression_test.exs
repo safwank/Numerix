@@ -29,7 +29,7 @@ defmodule Numerix.LinearRegressionTest do
   end
 
   property "R^2 is between 0 and 1" do
-    for_all {xs, ys} in {non_empty(list(int)), non_empty(list(int))} do
+    for_all {xs, ys} in {non_empty(list(int())), non_empty(list(int()))} do
       {xs, ys} = equalize_length(xs, ys)
 
       r_squared(xs, ys) |> between?(0, 1)
@@ -37,7 +37,7 @@ defmodule Numerix.LinearRegressionTest do
   end
 
   property "R^2 is 1 when predicted perfectly matches actual" do
-    for_all xs in non_empty(list(number)) do
+    for_all xs in non_empty(list(number())) do
       implies length(xs) > 4 do
         r_squared(xs, xs) == 1
       end
@@ -45,7 +45,7 @@ defmodule Numerix.LinearRegressionTest do
   end
 
   property "R^2 is symmetric" do
-    for_all {xs, ys} in {non_empty(list(number)), non_empty(list(number))} do
+    for_all {xs, ys} in {non_empty(list(number())), non_empty(list(number()))} do
       {xs, ys} = equalize_length(xs, ys)
 
       r_squared(xs, ys) == r_squared(ys, xs)

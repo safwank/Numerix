@@ -9,7 +9,7 @@ defmodule Numerix.OptimizationTest do
     cost_fun = fn(xs) -> Enum.sum(xs) end
 
     for_all {min, max, count} in such_that({min_, max_, _} in
-      {non_neg_integer, non_neg_integer, non_neg_integer} when min_ < max_) do
+      {non_neg_integer(), non_neg_integer(), non_neg_integer()} when min_ < max_) do
 
       domain = [min..max] |> Stream.cycle |> Enum.take(count)
 

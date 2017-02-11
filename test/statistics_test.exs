@@ -10,7 +10,7 @@ defmodule Numerix.StatisticsTest do
   end
 
   property :mean_times_item_count_equals_sum do
-    for_all xs in non_empty(list(number)) do
+    for_all xs in non_empty(list(number())) do
       mean = Float.round(Statistics.mean(xs) * length(xs), 4)
       sum = Float.round(Enum.sum(xs) / 1, 4)
       mean == sum
@@ -18,7 +18,7 @@ defmodule Numerix.StatisticsTest do
   end
 
   property :mean_is_between_mix_and_max do
-    for_all xs in non_empty(list(number)) do
+    for_all xs in non_empty(list(number())) do
       Statistics.mean(xs) |> between?(Enum.min(xs), Enum.max(xs))
     end
   end
@@ -28,7 +28,7 @@ defmodule Numerix.StatisticsTest do
   end
 
   property :median_is_the_middle_value_of_a_sorted_list do
-    for_all xs in non_empty(list(number)) do
+    for_all xs in non_empty(list(number())) do
       xs = Enum.uniq(xs)
       median = Statistics.median(xs)
       {first, second} = xs |> Enum.sort |> Enum.split_while(fn x -> x <= median end)
@@ -37,7 +37,7 @@ defmodule Numerix.StatisticsTest do
   end
 
   property :median_is_between_mix_and_max do
-    for_all xs in non_empty(list(number)) do
+    for_all xs in non_empty(list(number())) do
       Statistics.median(xs) |> between?(Enum.min(xs), Enum.max(xs))
     end
   end
@@ -47,13 +47,13 @@ defmodule Numerix.StatisticsTest do
   end
 
   property :mode_is_nil_if_no_value_is_repeated do
-    for_all xs in non_empty(list(number)) do
+    for_all xs in non_empty(list(number())) do
       xs |> Enum.uniq |> Statistics.mode == nil
     end
   end
 
   property :mode_is_the_most_frequent_value do
-    for_all {x, xs} in {number, non_empty(list(number))} do
+    for_all {x, xs} in {number(), non_empty(list(number()))} do
       frequent = [x]
       frequent_list = frequent |> Stream.cycle |> Enum.take(length(xs) + 1)
       xs |> Enum.concat(frequent_list) |> Enum.shuffle |> Statistics.mode == frequent
@@ -61,7 +61,7 @@ defmodule Numerix.StatisticsTest do
   end
 
   property :mode_is_the_most_frequent_set_of_values do
-    for_all {x, y, xs} in such_that({x_, y_, _} in {number, number, non_empty(list(number))} when x_ < y_) do
+    for_all {x, y, xs} in such_that({x_, y_, _} in {number(), number(), non_empty(list(number()))} when x_ < y_) do
       frequent_set = [x, y]
       frequent_list = frequent_set |> Stream.cycle |> Enum.take(2 * (length(xs) + 1))
 
@@ -79,7 +79,7 @@ defmodule Numerix.StatisticsTest do
   end
 
   property :range_is_the_difference_between_the_largest_and_smallest_values do
-    for_all xs in non_empty(list(number)) do
+    for_all xs in non_empty(list(number())) do
       sorted_xs = Enum.sort(xs)
       Statistics.range(xs) == List.last(sorted_xs) - List.first(sorted_xs)
     end
@@ -94,7 +94,7 @@ defmodule Numerix.StatisticsTest do
   end
 
   property :variance_is_the_square_of_standard_deviation do
-    for_all xs in such_that(xxs in non_empty(list(number)) when length(xxs) > 1) do
+    for_all xs in such_that(xxs in non_empty(list(number())) when length(xxs) > 1) do
       xs |> Statistics.variance |> Float.round(4) ==
         xs |> Statistics.std_dev |> :math.pow(2) |> Float.round(4)
     end
@@ -105,7 +105,7 @@ defmodule Numerix.StatisticsTest do
   end
 
   property :population_variance_is_the_square_of_population_standard_deviation do
-    for_all xs in such_that(xxs in non_empty(list(number)) when length(xxs) > 1) do
+    for_all xs in such_that(xxs in non_empty(list(number())) when length(xxs) > 1) do
       xs |> Statistics.population_variance |> Float.round(4) ==
         xs |> Statistics.population_std_dev |> :math.pow(2) |> Float.round(4)
     end
@@ -171,13 +171,13 @@ defmodule Numerix.StatisticsTest do
   end
 
   property :covariance_is_consistent_with_variance do
-    for_all xs in such_that(xxs in non_empty(list(number)) when length(xxs) > 1) do
+    for_all xs in such_that(xxs in non_empty(list(number())) when length(xxs) > 1) do
       assert_in_delta(Statistics.covariance(xs, xs), Statistics.variance(xs), 0.0000000001)
     end
   end
 
   property :covariance_is_symmetric do
-    for_all {xs, ys} in such_that({xxs, yys} in {non_empty(list(number)), non_empty(list(number))}
+    for_all {xs, ys} in such_that({xxs, yys} in {non_empty(list(number())), non_empty(list(number()))}
       when length(xxs) > 1 and length(yys) > 1) do
 
       {xs, ys} = equalize_length(xs, ys)
@@ -197,13 +197,13 @@ defmodule Numerix.StatisticsTest do
   end
 
   property :population_covariance_is_consistent_with_population_variance do
-    for_all xs in such_that(xxs in non_empty(list(number)) when length(xxs) > 1) do
+    for_all xs in such_that(xxs in non_empty(list(number())) when length(xxs) > 1) do
       assert_in_delta(Statistics.population_covariance(xs, xs), Statistics.population_variance(xs), 0.0000000001)
     end
   end
 
   property :population_covariance_is_symmetric do
-    for_all {xs, ys} in such_that({xxs, yys} in {non_empty(list(number)), non_empty(list(number))}
+    for_all {xs, ys} in such_that({xxs, yys} in {non_empty(list(number())), non_empty(list(number()))}
       when length(xxs) > 1 and length(yys) > 1) do
 
       {xs, ys} = equalize_length(xs, ys)
@@ -222,7 +222,7 @@ defmodule Numerix.StatisticsTest do
   end
 
   property :quantile_is_between_mix_and_max_values do
-    for_all {xs, tau} in {non_empty(list(number)), int(0, 100)} do
+    for_all {xs, tau} in {non_empty(list(number())), int(0, 100)} do
       tau = tau / 100
       {minimum, maximum} = Enum.min_max(xs)
 
@@ -250,7 +250,7 @@ defmodule Numerix.StatisticsTest do
   end
 
   property :percentile_is_between_mix_and_max_values do
-    for_all {xs, p} in {non_empty(list(number)), int(0, 100)} do
+    for_all {xs, p} in {non_empty(list(number())), int(0, 100)} do
       {minimum, maximum} = Enum.min_max(xs)
 
       Statistics.percentile(xs, p) |> between?(minimum, maximum)
@@ -258,7 +258,7 @@ defmodule Numerix.StatisticsTest do
   end
 
   property :percentile_is_consistent_with_quantile do
-    for_all {xs, p} in {non_empty(list(number)), int(0, 100)} do
+    for_all {xs, p} in {non_empty(list(number())), int(0, 100)} do
       tau = p / 100
 
       Statistics.percentile(xs, p) == Statistics.quantile(xs, tau)
@@ -276,7 +276,7 @@ defmodule Numerix.StatisticsTest do
   end
 
   property :weighted_mean_is_consistent_with_arithmetic_mean do
-    for_all {xs, w} in {non_empty(list(int)), pos_integer} do
+    for_all {xs, w} in {non_empty(list(int())), pos_integer()} do
       weights = [w] |> Stream.cycle |> Enum.take(length(xs))
 
       Statistics.weighted_mean(xs, weights) == Statistics.mean(xs)

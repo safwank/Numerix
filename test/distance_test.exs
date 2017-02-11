@@ -12,13 +12,13 @@ defmodule Numerix.DistanceTest do
   end
 
   property "MSE is zero when the vectors are equal" do
-    for_all xs in non_empty(list(number)) do
+    for_all xs in non_empty(list(number())) do
       Distance.mse(xs, xs) == 0
     end
   end
 
   property "MSE is not zero when the vectors are different" do
-    for_all {xs, ys} in {non_empty(list(int)), non_empty(list(int))} do
+    for_all {xs, ys} in {non_empty(list(int())), non_empty(list(int()))} do
       {xs, ys} = equalize_length(xs, ys)
 
       implies xs != ys do
@@ -34,13 +34,13 @@ defmodule Numerix.DistanceTest do
   end
 
   property "RMSE is zero when the vectors are equal" do
-    for_all xs in non_empty(list(number)) do
+    for_all xs in non_empty(list(number())) do
       Distance.rmse(xs, xs) == 0
     end
   end
 
   property "RMSE is not zero when the vectors are different" do
-    for_all {xs, ys} in {non_empty(list(int)), non_empty(list(int))} do
+    for_all {xs, ys} in {non_empty(list(int())), non_empty(list(int()))} do
       {xs, ys} = equalize_length(xs, ys)
 
       implies xs != ys do
@@ -56,7 +56,7 @@ defmodule Numerix.DistanceTest do
   end
 
   property :pearson_distance_is_the_inverse_of_its_correlation do
-    for_all {xs, ys} in {non_empty(list(int)), non_empty(list(int))} do
+    for_all {xs, ys} in {non_empty(list(int())), non_empty(list(int()))} do
       {xs, ys} = equalize_length(xs, ys)
 
       Distance.pearson(xs, ys) == 1.0 - Correlation.pearson(xs, ys)
@@ -64,7 +64,7 @@ defmodule Numerix.DistanceTest do
   end
 
   property :pearson_distance_is_between_0_and_2 do
-    for_all {xs, ys} in {non_empty(list(int)), non_empty(list(int))} do
+    for_all {xs, ys} in {non_empty(list(int())), non_empty(list(int()))} do
       {xs, ys} = equalize_length(xs, ys)
 
       Distance.pearson(xs, ys) |> between?(0, 2)
@@ -78,7 +78,7 @@ defmodule Numerix.DistanceTest do
   end
 
   property :minkowski_distance_is_zero_when_the_vectors_are_equal do
-    for_all xs in non_empty(list(number)) do
+    for_all xs in non_empty(list(number())) do
       Distance.minkowski(xs, xs) == 0
     end
   end
@@ -105,7 +105,7 @@ defmodule Numerix.DistanceTest do
   end
 
   property :euclidean_distance_is_zero_when_the_vectors_are_equal do
-    for_all xs in non_empty(list(number)) do
+    for_all xs in non_empty(list(number())) do
       Distance.euclidean(xs, xs) == 0
     end
   end
@@ -124,7 +124,7 @@ defmodule Numerix.DistanceTest do
   end
 
   property :manhattan_distance_is_zero_when_the_vectors_are_equal do
-    for_all xs in non_empty(list(number)) do
+    for_all xs in non_empty(list(number())) do
       Distance.manhattan(xs, xs) == 0
     end
   end
@@ -159,7 +159,7 @@ defmodule Numerix.DistanceTest do
   end
 
   property :jaccard_is_between_0_and_1 do
-    for_all {xs, ys} in {non_empty(list(non_neg_integer)), non_empty(list(non_neg_integer))} do
+    for_all {xs, ys} in {non_empty(list(non_neg_integer())), non_empty(list(non_neg_integer()))} do
       Distance.jaccard(xs, ys) |> between?(0, 1)
     end
   end

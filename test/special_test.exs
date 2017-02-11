@@ -41,7 +41,7 @@ defmodule Numerix.SpecialTest do
   end
 
   property :logistic_is_between_0_and_1 do
-    for_all x in number do
+    for_all x in number() do
       Special.logistic(x) |> between?(0, 1)
     end
   end

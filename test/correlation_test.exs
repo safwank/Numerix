@@ -16,7 +16,7 @@ defmodule Numerix.CorrelationTest do
   end
 
   property :pearson_correlation_is_zero_when_the_vectors_are_equal_but_variance_is_zero do
-    for_all {x, len} in {int, pos_integer} do
+    for_all {x, len} in {int(), pos_integer()} do
       xs = [x] |> Stream.cycle |> Enum.take(len)
 
       Correlation.pearson(xs, xs) == 0.0
@@ -24,7 +24,7 @@ defmodule Numerix.CorrelationTest do
   end
 
   property :pearson_correlation_is_one_when_the_vectors_are_equal_and_variance_is_not_zero do
-    for_all xs in non_empty(list(int)) do
+    for_all xs in non_empty(list(int())) do
       implies length(xs) > 1 and xs == Enum.uniq(xs) do
         Correlation.pearson(xs, xs) == 1.0
       end
@@ -32,7 +32,7 @@ defmodule Numerix.CorrelationTest do
   end
 
   property :pearson_correlation_is_between_minus_1_and_1 do
-    for_all {xs, ys} in {non_empty(list(int)), non_empty(list(int))} do
+    for_all {xs, ys} in {non_empty(list(int())), non_empty(list(int()))} do
       {xs, ys} = equalize_length(xs, ys)
 
       Correlation.pearson(xs, ys) |> between?(-1, 1)

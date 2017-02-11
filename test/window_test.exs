@@ -18,7 +18,7 @@ defmodule Numerix.WindowTest do
   end
 
   property :gaussian_is_between_0_and_1 do
-    for_all {width, sigma} in {number, non_neg_integer} do
+    for_all {width, sigma} in {number(), non_neg_integer()} do
       sigma = sigma / 100
 
       Window.gaussian(width, sigma) |> between?(0, 1)
