@@ -31,6 +31,7 @@ defmodule Numerix.LinearRegression do
   and a set of predictors and responses, i.e.
   it calculates `y` in `y:x↦a+bx`.
   """
+  @spec predict(number, [number], [number]) :: number
   def predict(x, xs, ys) do
     {intercept, slope} = fit(xs, ys)
     intercept + slope * x
