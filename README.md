@@ -14,11 +14,11 @@ Add `numerix` to your list of dependencies in `mix.exs`:
   end
 ```
 
-Ensure `numerix` is started before your application:
+Ensure `numerix` and its dependencies are started before your application:
 
 ```elixir
   def application do
-    [applications: [:numerix]]
+    [applications: [:numerix, :gen_stage, :flow]]
   end
 ```
 
