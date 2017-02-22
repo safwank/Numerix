@@ -9,8 +9,8 @@ defmodule Numerix.Mixfile do
       version: "0.4.2",
       elixir: "~> 1.3",
       source_url: "https://github.com/safwank/Numerix",
-      deps: deps,
-      package: package,
+      deps: deps(),
+      package: package(),
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
         "credo": :test,
