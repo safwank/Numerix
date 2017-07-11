@@ -1,4 +1,4 @@
-defmodule Interpolation do
+defmodule Numeric.Interpolation do
     @moduledoc """
     Implementation of Lagrange'a interpolation method
     Usage:
