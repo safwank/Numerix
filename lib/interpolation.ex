@@ -6,11 +6,6 @@ defmodule Numeric.Interpolation do
     """
 
     def lagrange(features, x) do
-        @doc """ 
-        function to interpolate the given data points using Lagrange's formula
-        x corresponds to the new data point whose value is to be obtained
-        features represents known data points 
-        """
          Enum.to_list(0..length(features) -1)
          |> Enum.map(fn(y) -> snd(take(features, y))* l(y, features, x) end)
          |> List.foldr(0, fn(y, acc) -> y+acc end)
