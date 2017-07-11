@@ -8,10 +8,10 @@ defmodule Numeric.Interpolation do
     @type feature_tuple :: {number, number}
 
     @spec lagrange([{number, number}], number) :: number
-    @doc """ 
+    @doc """
         function to interpolate the given data points using Lagrange's formula
         x corresponds to the new data point whose value is to be obtained
-        features represents known data points 
+        features represents known data points
         """
     def lagrange(features, x) do
          Enum.to_list(0..length(features) - 1)
@@ -37,7 +37,7 @@ defmodule Numeric.Interpolation do
     @spec fst(feature_tuple) :: number
     def fst({x, _}) do x end
 
-    @spec fst(tuple) :: number
+    @spec snd(tuple) :: number
     def snd({_, x}) do x end
 
 end
