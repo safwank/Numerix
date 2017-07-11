@@ -4,11 +4,12 @@ defmodule Interpolation do
     Usage:
     ex. lagrange([{5,150}, {7,392}, {11, 1452}, {13, 2366}, {17, 5202}], 9)
     """
-    
+
     def lagrange(features, x) do
-        @doc """ function to interpolate the given data points using Lagrange's formula
-                 x corresponds to the new data point whose value is to be obtained
-                 features represents known data points 
+        @doc """ 
+        function to interpolate the given data points using Lagrange's formula
+        x corresponds to the new data point whose value is to be obtained
+        features represents known data points 
         """
          Enum.to_list(0..length(features) -1)
          |> Enum.map(fn(y) -> snd(take(features, y))* l(y, features, x) end)
