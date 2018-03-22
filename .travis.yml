@@ -4,7 +4,7 @@ elixir:
   - 1.6
 otp_release:
   - 19.2
-  - 20.3
+  - 20.2
 cache:
   directories:
     - .plts
