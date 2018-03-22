@@ -50,9 +50,9 @@ defmodule Numerix.DistanceTest do
   end
 
   test :pearson_is_nil_when_any_vector_is_empty do
-    refute Distance.pearson([],[1])
-    refute Distance.pearson([2],[])
-    refute Distance.pearson([],[])
+    refute Distance.pearson([], [1])
+    refute Distance.pearson([2], [])
+    refute Distance.pearson([], [])
   end
 
   property :pearson_distance_is_the_inverse_of_its_correlation do
@@ -72,9 +72,9 @@ defmodule Numerix.DistanceTest do
   end
 
   test :minkowski_is_nil_when_any_vector_is_empty do
-    refute Distance.minkowski([],[1])
-    refute Distance.minkowski([2],[])
-    refute Distance.minkowski([],[])
+    refute Distance.minkowski([], [1])
+    refute Distance.minkowski([2], [])
+    refute Distance.minkowski([], [])
   end
 
   property :minkowski_distance_is_zero_when_the_vectors_are_equal do
@@ -99,9 +99,9 @@ defmodule Numerix.DistanceTest do
   end
 
   test :euclidean_is_nil_when_any_vector_is_empty do
-    refute Distance.euclidean([],[1])
-    refute Distance.euclidean([2],[])
-    refute Distance.euclidean([],[])
+    refute Distance.euclidean([], [1])
+    refute Distance.euclidean([2], [])
+    refute Distance.euclidean([], [])
   end
 
   property :euclidean_distance_is_zero_when_the_vectors_are_equal do
@@ -118,9 +118,9 @@ defmodule Numerix.DistanceTest do
   end
 
   test :manhattan_is_nil_when_any_vector_is_empty do
-    refute Distance.manhattan([],[1])
-    refute Distance.manhattan([2],[])
-    refute Distance.manhattan([],[])
+    refute Distance.manhattan([], [1])
+    refute Distance.manhattan([2], [])
+    refute Distance.manhattan([], [])
   end
 
   property :manhattan_distance_is_zero_when_the_vectors_are_equal do
@@ -141,8 +141,8 @@ defmodule Numerix.DistanceTest do
   end
 
   test :jaccard_is_nil_when_any_one_vector_is_empty do
-    refute Distance.jaccard([],[1])
-    refute Distance.jaccard([2],[])
+    refute Distance.jaccard([], [1])
+    refute Distance.jaccard([2], [])
   end
 
   test :jaccard_is_correct_for_specific_examples do
@@ -163,5 +163,4 @@ defmodule Numerix.DistanceTest do
       Distance.jaccard(xs, ys) |> between?(0, 1)
     end
   end
-
 end

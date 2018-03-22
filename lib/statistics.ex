@@ -179,7 +179,7 @@ defmodule Numerix.Statistics do
   def quantile(_xs, tau) when tau < 0 or tau > 1, do: nil
   def quantile(xs, tau) do
     sorted_xs = xs |> Enum.sort
-    h = (length(sorted_xs) + 1/3) * tau + 1/3
+    h = (length(sorted_xs) + 1 / 3) * tau + 1 / 3
     hf = h |> Float.floor |> round
     do_quantile(sorted_xs, h, hf)
   end

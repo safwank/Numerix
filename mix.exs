@@ -6,8 +6,8 @@ defmodule Numerix.Mixfile do
       app: :numerix,
       name: "Numerix",
       description: "A collection of useful mathematical functions in Elixir with a slant towards statistics, linear algebra and machine learning",
-      version: "0.4.2",
-      elixir: "~> 1.3",
+      version: "0.5.0",
+      elixir: "~> 1.5",
       source_url: "https://github.com/safwank/Numerix",
       deps: deps(),
       package: package(),
@@ -30,14 +30,14 @@ defmodule Numerix.Mixfile do
 
   defp deps do
     [
-      {:credo, "~> 0.6", only: [:dev, :test]},
-      {:dialyxir, "~> 0.4", only: [:dev, :test]},
-      {:excoveralls, "~> 0.6", only: :test},
+      {:credo, "~> 0.9.0-rc8", only: [:dev, :test]},
+      {:dialyxir, "~> 0.5", only: [:dev, :test]},
+      {:excoveralls, "~> 0.8", only: :test},
       {:excheck, "~> 0.5", only: :test},
       {:triq, github: "triqng/triq", only: :test},
-      {:ex_doc, "~> 0.14", only: :dev},
-      {:earmark, "~> 1.1", only: :dev},
-      {:flow, "~> 0.11"}
+      {:ex_doc, "~> 0.18", only: :dev},
+      {:earmark, "~> 1.2", only: :dev},
+      {:flow, "~> 0.13"}
     ]
   end
 
