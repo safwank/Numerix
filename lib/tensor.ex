@@ -52,7 +52,7 @@ defmodule Numerix.Tensor do
     |> Enum.sum()
   end
 
-  Enum.each([:exp, :log], fn fun ->
+  Enum.each([:exp, :log, :tanh], fn fun ->
     def unquote(:"#{fun}")(x) do
       fn i -> apply(:math, unquote(fun), [i]) end
       |> t_apply(x)

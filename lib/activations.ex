@@ -12,10 +12,6 @@ defmodule Numerix.Activations do
     e / s
   end
 
-  def softmax(_) do
-    raise "Tensor has to be at least 2D"
-  end
-
   def softplus(x) do
     log(1 + exp(x))
   end
@@ -35,5 +31,9 @@ defmodule Numerix.Activations do
 
   def leaky_relu(x, alpha) when alpha != 0 do
     max(alpha * x, x)
+  end
+
+  def tanh(x) do
+    Tensor.tanh(x)
   end
 end

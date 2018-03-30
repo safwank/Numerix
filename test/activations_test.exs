@@ -11,16 +11,6 @@ defmodule Numerix.ActivationsTest do
   @test_3dtensor Tensor.new([[@test_list]])
 
   describe "softmax/1" do
-    test "raises an error when passed a scalar" do
-      assert_raise RuntimeError, fn -> softmax(42) end
-    end
-
-    test "raises an error when passed a vector" do
-      assert_raise RuntimeError, fn ->
-        @test_list |> Tensor.new() |> softmax()
-      end
-    end
-
     test "is correct for a matrix" do
       assert softmax(@test_matrix).items == [
                [
@@ -198,6 +188,48 @@ defmodule Numerix.ActivationsTest do
       tensor = Tensor.new([[[-2, -1, 0, 1, 2]]])
 
       assert leaky_relu(tensor, 0.1).items == [[[-0.2, -0.1, 0, 1, 2]]]
+    end
+  end
+
+  describe "tanh/1" do
+    test "is correct for a scalar" do
+      assert tanh(Tensor.new(1)).items == 0.76159415595576485
+    end
+
+    test "is correct for a vector" do
+      assert tanh(@test_vector).items == [
+               0.0,
+               0.09966799462495582,
+               0.46211715726000974,
+               0.7162978701990245,
+               0.7615941559557649
+             ]
+    end
+
+    test "is correct for a matrix" do
+      assert tanh(@test_matrix).items == [
+               [
+                 0.0,
+                 0.09966799462495582,
+                 0.46211715726000974,
+                 0.7162978701990245,
+                 0.7615941559557649
+               ]
+             ]
+    end
+
+    test "is correct for a 3D tensor" do
+      assert tanh(@test_3dtensor).items == [
+               [
+                 [
+                   0.0,
+                   0.09966799462495582,
+                   0.46211715726000974,
+                   0.7162978701990245,
+                   0.7615941559557649
+                 ]
+               ]
+             ]
     end
   end
 end
