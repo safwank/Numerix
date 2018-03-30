@@ -26,10 +26,15 @@ defmodule Numerix.Tensor do
     raise "Tensor must be a numeric scalar, list or nested list"
   end
 
-  def max(x = %Tensor{}) do
+  def max_in(x) do
     x.items
     |> List.flatten()
     |> Enum.max()
+  end
+
+  def max_between(0, x) do
+    fn i -> max(0, i) end
+    |> t_apply(x)
   end
 
   def sum(x) do

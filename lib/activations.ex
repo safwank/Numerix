@@ -6,7 +6,7 @@ defmodule Numerix.Activations do
   use Numerix.Tensor
 
   def softmax(x = %Tensor{dims: dims}) when dims > 1 do
-    m = Tensor.max(x)
+    m = max_in(x)
     e = exp(x - m)
     s = sum(e)
     e / s
@@ -30,7 +30,6 @@ defmodule Numerix.Activations do
   end
 
   def relu(x) do
-    fn i -> max(0, i) end
-    |> t_apply(x)
+    max_between(0, x)
   end
 end
