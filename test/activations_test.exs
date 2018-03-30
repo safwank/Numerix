@@ -114,4 +114,46 @@ defmodule Numerix.ActivationsTest do
              ]
     end
   end
+
+  describe "softplus/1" do
+    test "is correct for a scalar" do
+      assert softplus(Tensor.new(1)).items == 1.3132616875182228
+    end
+
+    test "is correct for a vector" do
+      assert softplus(@test_vector).items == [
+               0.6931471805599453,
+               0.744396660073571,
+               0.9740769841801067,
+               1.2411538747320878,
+               1.3132616875182228
+             ]
+    end
+
+    test "is correct for a matrix" do
+      assert softplus(@test_matrix).items == [
+               [
+                 0.6931471805599453,
+                 0.744396660073571,
+                 0.9740769841801067,
+                 1.2411538747320878,
+                 1.3132616875182228
+               ]
+             ]
+    end
+
+    test "is correct for a 3D tensor" do
+      assert softplus(@test_3dtensor).items == [
+               [
+                 [
+                   0.6931471805599453,
+                   0.744396660073571,
+                   0.9740769841801067,
+                   1.2411538747320878,
+                   1.3132616875182228
+                 ]
+               ]
+             ]
+    end
+  end
 end

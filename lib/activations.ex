@@ -16,6 +16,10 @@ defmodule Numerix.Activations do
     raise "Tensor has to be at least 2D"
   end
 
+  def softplus(x) do
+    log(ones_like(x) + exp(x))
+  end
+
   def sigmoid(x = %Tensor{dims: 0}) do
     1 / (1 + exp(-x))
   end

@@ -3,6 +3,7 @@ defmodule Numerix.TensorTest do
   use Numerix.Tensor
 
   @test_list [0, 0.1, 0.5, 0.9, 1.0]
+  @ones Stream.repeatedly(fn -> 1.0 end) |> Enum.take(length(@test_list))
 
   describe "new/1" do
     test "raises an error when passed a non-numeric scalar" do
@@ -42,6 +43,26 @@ defmodule Numerix.TensorTest do
 
     test "creates an empty 3D tensor" do
       assert Tensor.new([[[]]]) == %Tensor{items: [[[]]], dims: 3}
+    end
+  end
+
+  describe "ones_like/1" do
+    test "creates a vector of ones with the same shape and type as a given vector" do
+      vector = Tensor.new(@test_list)
+
+      assert ones_like(vector) == Tensor.new(@ones)
+    end
+
+    test "creates a matrix of ones with the same shape and type as a given matrix" do
+      matrix = Tensor.new([@test_list, @test_list])
+
+      assert ones_like(matrix) == Tensor.new([@ones, @ones])
+    end
+
+    test "creates a 3D tensor of ones with the same shape and type as a given 3D tensor" do
+      tensor = Tensor.new([[@test_list, @test_list], [@test_list, @test_list]])
+
+      assert ones_like(tensor) == Tensor.new([[@ones, @ones], [@ones, @ones]])
     end
   end
 

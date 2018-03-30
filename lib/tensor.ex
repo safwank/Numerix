@@ -38,11 +38,19 @@ defmodule Numerix.Tensor do
     |> Enum.sum()
   end
 
-  def exp(x) do
+  def ones_like(x) do
     x.items
-    |> apply_scalar(&:math.exp/1, x.dims)
+    |> apply_scalar(fn _ -> 1 end, x.dims)
     |> Tensor.new()
   end
+
+  Enum.each([:exp, :log], fn fun ->
+    def unquote(:"#{fun}")(x) do
+      x.items
+      |> apply_scalar(&apply(:math, unquote(fun), [&1]), x.dims)
+      |> Tensor.new()
+    end
+  end)
 
   Enum.each([:+, :-], fn op ->
     def unquote(:"#{op}")(x = %Tensor{}) do
