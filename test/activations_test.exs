@@ -174,4 +174,30 @@ defmodule Numerix.ActivationsTest do
       assert relu(@test_3dtensor).items == [[@test_list]]
     end
   end
+
+  describe "leaky_relu/2" do
+    test "is correct for a scalar" do
+      matrix = Tensor.new(2.0)
+
+      assert leaky_relu(matrix, 0.1).items == 2.0
+    end
+
+    test "is correct for a vector" do
+      vector = Tensor.new([-2, -1, 0, 1, 2])
+
+      assert leaky_relu(vector, 0.1).items == [-0.2, -0.1, 0, 1, 2]
+    end
+
+    test "is correct for a matrix" do
+      matrix = Tensor.new([[-2, -1, 0, 1, 2]])
+
+      assert leaky_relu(matrix, 0.1).items == [[-0.2, -0.1, 0, 1, 2]]
+    end
+
+    test "is correct for a 3D tensor" do
+      tensor = Tensor.new([[[-2, -1, 0, 1, 2]]])
+
+      assert leaky_relu(tensor, 0.1).items == [[[-0.2, -0.1, 0, 1, 2]]]
+    end
+  end
 end

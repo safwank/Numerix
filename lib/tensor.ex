@@ -5,13 +5,13 @@ defmodule Numerix.Tensor do
 
   alias Numerix.Tensor
 
-  import Kernel, except: [+: 1, -: 1, +: 2, -: 2, *: 2, /: 2]
+  import Kernel, except: [+: 1, -: 1, +: 2, -: 2, *: 2, /: 2, max: 2]
 
   defstruct items: [[[]]], dims: 1
 
   defmacro __using__(_opts) do
     quote do
-      import Kernel, except: [+: 1, -: 1, +: 2, -: 2, *: 2, /: 2]
+      import Kernel, except: [+: 1, -: 1, +: 2, -: 2, *: 2, /: 2, max: 2]
       import Numerix.Tensor
 
       alias Numerix.Tensor
@@ -26,26 +26,30 @@ defmodule Numerix.Tensor do
     raise "Tensor must be a numeric scalar, list or nested list"
   end
 
-  def max_in(x) do
+  def max(x = %Tensor{}) do
     x.items
     |> List.flatten()
     |> Enum.max()
   end
 
-  def max_between(0, x) do
-    fn i -> max(0, i) end
+  def max(s, x = %Tensor{}) when is_number(s) do
+    fn i -> max(s, i) end
     |> t_apply(x)
+  end
+
+  def max(x = %Tensor{}, y = %Tensor{}) do
+    fn i, j -> max(i, j) end
+    |> t_apply(x, y)
+  end
+
+  def max(first, second) do
+    Kernel.max(first, second)
   end
 
   def sum(x) do
     x.items
     |> List.flatten()
     |> Enum.sum()
-  end
-
-  def ones_like(x) do
-    fn _ -> 1 end
-    |> t_apply(x)
   end
 
   Enum.each([:exp, :log], fn fun ->
@@ -61,7 +65,7 @@ defmodule Numerix.Tensor do
       |> t_apply(x)
     end
 
-    def unquote(:"#{op}")(x) when is_number(x) do
+    def unquote(:"#{op}")(x) do
       apply(Kernel, unquote(op), [x])
     end
   end)
@@ -82,7 +86,7 @@ defmodule Numerix.Tensor do
       |> t_apply(x, y)
     end
 
-    def unquote(:"#{op}")(x, y) when is_number(x) and is_number(y) do
+    def unquote(:"#{op}")(x, y) do
       apply(Kernel, unquote(op), [x, y])
     end
   end)

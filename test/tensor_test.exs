@@ -46,26 +46,6 @@ defmodule Numerix.TensorTest do
     end
   end
 
-  describe "ones_like/1" do
-    test "creates a vector of ones with the same shape and type as a given vector" do
-      vector = Tensor.new(@test_list)
-
-      assert ones_like(vector) == Tensor.new(@ones)
-    end
-
-    test "creates a matrix of ones with the same shape and type as a given matrix" do
-      matrix = Tensor.new([@test_list, @test_list])
-
-      assert ones_like(matrix) == Tensor.new([@ones, @ones])
-    end
-
-    test "creates a 3D tensor of ones with the same shape and type as a given 3D tensor" do
-      tensor = Tensor.new([[@test_list, @test_list], [@test_list, @test_list]])
-
-      assert ones_like(tensor) == Tensor.new([[@ones, @ones], [@ones, @ones]])
-    end
-  end
-
   describe "/" do
     test "divides one vector by another" do
       x = Tensor.new([1.0, 1.10517097, 1.64872122, 2.45960307, 2.71828175])
