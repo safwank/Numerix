@@ -191,6 +191,27 @@ defmodule Numerix.ActivationsTest do
     end
   end
 
+  describe "elu/1" do
+    test "is correct for a scalar" do
+      assert elu(Tensor.new(-42.0)).items == -1.0
+    end
+
+    test "is correct for a vector" do
+      assert elu(@test_vector).items == @test_list
+
+      negative_values = Tensor.new([-1, -2])
+      assert elu(negative_values).items == [-0.6321205588285577, -0.8646647167633873]
+    end
+
+    test "is correct for a matrix" do
+      assert elu(@test_matrix).items == [@test_list]
+    end
+
+    test "is correct for a 3D tensor" do
+      assert elu(@test_3dtensor).items == [[@test_list]]
+    end
+  end
+
   describe "tanh/1" do
     test "is correct for a scalar" do
       assert tanh(Tensor.new(1)).items == 0.76159415595576485

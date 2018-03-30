@@ -33,6 +33,16 @@ defmodule Numerix.Activations do
     max(alpha * x, x)
   end
 
+  def elu(x, alpha \\ 1.0) do
+    t_apply(
+      fn
+        i when i >= 0 -> i
+        i -> alpha * (:math.exp(i) - 1)
+      end,
+      x
+    )
+  end
+
   def tanh(x) do
     Tensor.tanh(x)
   end
