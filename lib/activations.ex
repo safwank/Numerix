@@ -28,4 +28,9 @@ defmodule Numerix.Activations do
     z = exp(x)
     z / (1 + z)
   end
+
+  def relu(x) do
+    fn i -> max(0, i) end
+    |> t_apply(x)
+  end
 end

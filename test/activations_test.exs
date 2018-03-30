@@ -156,4 +156,22 @@ defmodule Numerix.ActivationsTest do
              ]
     end
   end
+
+  describe "relu/1" do
+    test "is correct for a scalar" do
+      assert relu(Tensor.new(-42)).items == 0
+    end
+
+    test "is correct for a vector" do
+      assert relu(@test_vector).items == @test_list
+    end
+
+    test "is correct for a matrix" do
+      assert relu(@test_matrix).items == [@test_list]
+    end
+
+    test "is correct for a 3D tensor" do
+      assert relu(@test_3dtensor).items == [[@test_list]]
+    end
+  end
 end

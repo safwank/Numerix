@@ -26,7 +26,7 @@ defmodule Numerix.Tensor do
     raise "Tensor must be a numeric scalar, list or nested list"
   end
 
-  def max(x) do
+  def max(x = %Tensor{}) do
     x.items
     |> List.flatten()
     |> Enum.max()
@@ -39,24 +39,21 @@ defmodule Numerix.Tensor do
   end
 
   def ones_like(x) do
-    x.items
-    |> apply_scalar(fn _ -> 1 end, x.dims)
-    |> Tensor.new()
+    fn _ -> 1 end
+    |> t_apply(x)
   end
 
   Enum.each([:exp, :log], fn fun ->
     def unquote(:"#{fun}")(x) do
-      x.items
-      |> apply_scalar(&apply(:math, unquote(fun), [&1]), x.dims)
-      |> Tensor.new()
+      fn i -> apply(:math, unquote(fun), [i]) end
+      |> t_apply(x)
     end
   end)
 
   Enum.each([:+, :-], fn op ->
     def unquote(:"#{op}")(x = %Tensor{}) do
-      x.items
-      |> apply_scalar(&apply(Kernel, unquote(op), [&1]), x.dims)
-      |> Tensor.new()
+      fn i -> apply(Kernel, unquote(op), [i]) end
+      |> t_apply(x)
     end
 
     def unquote(:"#{op}")(x) when is_number(x) do
@@ -66,27 +63,36 @@ defmodule Numerix.Tensor do
 
   Enum.each([:+, :-, :*, :/], fn op ->
     def unquote(:"#{op}")(x = %Tensor{}, s) when is_number(s) do
-      x.items
-      |> apply_scalar(&apply(Kernel, unquote(op), [&1, s]), x.dims)
-      |> Tensor.new()
+      fn i -> apply(Kernel, unquote(op), [i, s]) end
+      |> t_apply(x)
     end
 
     def unquote(:"#{op}")(s, x = %Tensor{}) when is_number(s) do
-      x.items
-      |> apply_scalar(&apply(Kernel, unquote(op), [s, &1]), x.dims)
-      |> Tensor.new()
+      fn i -> apply(Kernel, unquote(op), [s, i]) end
+      |> t_apply(x)
     end
 
     def unquote(:"#{op}")(x = %Tensor{}, y = %Tensor{}) do
-      x.items
-      |> apply_pairwise(y.items, &apply(Kernel, unquote(op), [&1, &2]), x.dims)
-      |> Tensor.new()
+      fn i, j -> apply(Kernel, unquote(op), [i, j]) end
+      |> t_apply(x, y)
     end
 
     def unquote(:"#{op}")(x, y) when is_number(x) and is_number(y) do
       apply(Kernel, unquote(op), [x, y])
     end
   end)
+
+  def t_apply(fun, x) do
+    fun
+    |> do_apply(x.items, x.dims)
+    |> Tensor.new()
+  end
+
+  def t_apply(fun, x, y) do
+    fun
+    |> do_apply(x.items, y.items, x.dims)
+    |> Tensor.new()
+  end
 
   defp calculate_dims(x, dims \\ 0)
 
@@ -106,23 +112,23 @@ defmodule Numerix.Tensor do
     raise "Tensor must be a numeric scalar, list or nested list"
   end
 
-  defp apply_scalar(x, fun, 0) do
+  defp do_apply(fun, x, 0) do
     fun.(x)
   end
 
-  defp apply_scalar(items, fun, dim) do
-    for i <- items, do: apply_scalar(i, fun, dim - 1)
+  defp do_apply(fun, items, dim) do
+    for i <- items, do: do_apply(fun, i, dim - 1)
   end
 
-  defp apply_pairwise(x, y, fun, 0) do
+  defp do_apply(fun, x, y, 0) do
     fun.(x, y)
   end
 
-  defp apply_pairwise(x, y, fun, dim) do
+  defp do_apply(fun, x, y, dim) do
     x
     |> Stream.zip(y)
     |> Enum.map(fn {a, b} ->
-      apply_pairwise(a, b, fun, dim - 1)
+      do_apply(fun, a, b, dim - 1)
     end)
   end
 end
