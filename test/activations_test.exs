@@ -212,6 +212,51 @@ defmodule Numerix.ActivationsTest do
     end
   end
 
+  describe "selu/1" do
+    test "is correct for a scalar" do
+      assert selu(Tensor.new(-42.0)).items == -1.7580993408473766
+    end
+
+    test "is correct for a vector" do
+      assert selu(@test_vector).items == [
+               0.0,
+               0.10507009873554805,
+               0.5253504936777402,
+               0.9456308886199324,
+               1.0507009873554805
+             ]
+
+      negative_values = Tensor.new([-1, -2])
+      assert selu(negative_values).items == [-1.1113307378125625, -1.520166468595695]
+    end
+
+    test "is correct for a matrix" do
+      assert selu(@test_matrix).items == [
+               [
+                 0.0,
+                 0.10507009873554805,
+                 0.5253504936777402,
+                 0.9456308886199324,
+                 1.0507009873554805
+               ]
+             ]
+    end
+
+    test "is correct for a 3D tensor" do
+      assert selu(@test_3dtensor).items == [
+               [
+                 [
+                   0.0,
+                   0.10507009873554805,
+                   0.5253504936777402,
+                   0.9456308886199324,
+                   1.0507009873554805
+                 ]
+               ]
+             ]
+    end
+  end
+
   describe "tanh/1" do
     test "is correct for a scalar" do
       assert tanh(Tensor.new(1)).items == 0.76159415595576485
