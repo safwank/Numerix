@@ -5,13 +5,13 @@ defmodule Numerix.Tensor do
 
   alias Numerix.Tensor
 
-  import Kernel, except: [+: 1, -: 1, +: 2, -: 2, *: 2, /: 2, max: 2]
+  import Kernel, except: [+: 1, -: 1, abs: 1, +: 2, -: 2, *: 2, /: 2, max: 2]
 
   defstruct items: [[[]]], dims: 1
 
   defmacro __using__(_opts) do
     quote do
-      import Kernel, except: [+: 1, -: 1, +: 2, -: 2, *: 2, /: 2, max: 2]
+      import Kernel, except: [+: 1, -: 1, abs: 1, +: 2, -: 2, *: 2, /: 2, max: 2]
       import Numerix.Tensor
 
       alias Numerix.Tensor
@@ -59,7 +59,7 @@ defmodule Numerix.Tensor do
     end
   end)
 
-  Enum.each([:+, :-], fn op ->
+  Enum.each([:+, :-, :abs], fn op ->
     def unquote(:"#{op}")(x = %Tensor{}) do
       fn i -> apply(Kernel, unquote(op), [i]) end
       |> t_apply(x)

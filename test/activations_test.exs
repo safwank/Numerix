@@ -147,6 +147,48 @@ defmodule Numerix.ActivationsTest do
     end
   end
 
+  describe "softsign/1" do
+    test "is correct for a scalar" do
+      assert softsign(Tensor.new(1.0)).items == 0.5
+    end
+
+    test "is correct for a vector" do
+      assert softsign(@test_vector).items == [
+               0.0,
+               0.09090909090909091,
+               0.3333333333333333,
+               0.4736842105263158,
+               0.5
+             ]
+    end
+
+    test "is correct for a matrix" do
+      assert softsign(@test_matrix).items == [
+               [
+                 0.0,
+                 0.09090909090909091,
+                 0.3333333333333333,
+                 0.4736842105263158,
+                 0.5
+               ]
+             ]
+    end
+
+    test "is correct for a 3D tensor" do
+      assert softsign(@test_3dtensor).items == [
+               [
+                 [
+                   0.0,
+                   0.09090909090909091,
+                   0.3333333333333333,
+                   0.4736842105263158,
+                   0.5
+                 ]
+               ]
+             ]
+    end
+  end
+
   describe "relu/1" do
     test "is correct for a scalar" do
       assert relu(Tensor.new(-42)).items == 0

@@ -16,6 +16,10 @@ defmodule Numerix.Activations do
     log(1 + exp(x))
   end
 
+  def softsign(x) do
+    x / (1 + abs(x))
+  end
+
   def sigmoid(x = %Tensor{dims: 0}) do
     1 / (1 + exp(-x))
   end
