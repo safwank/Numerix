@@ -1,6 +1,6 @@
 defmodule Numerix.Tensor do
   @moduledoc """
-  Defines a data structure for a tensor and its operators.
+  Defines a data structure for a tensor and its operations.
   """
 
   alias Numerix.Tensor
@@ -18,6 +18,10 @@ defmodule Numerix.Tensor do
     end
   end
 
+  @doc """
+  Creates a new tensor from the given scalar, list or nested list.
+  """
+  @spec new(number | [number]) :: %Tensor{} | no_return()
   def new(x) when is_number(x) or is_list(x) do
     %Tensor{items: x, dims: calculate_dims(x)}
   end
@@ -26,33 +30,55 @@ defmodule Numerix.Tensor do
     raise "Tensor must be a numeric scalar, list or nested list"
   end
 
+  @doc """
+  Returns the biggest value in the given tensor.
+  """
+  @spec max(%Tensor{}) :: number
   def max(x = %Tensor{}) do
     x.items
     |> List.flatten()
     |> Enum.max()
   end
 
+  @doc """
+  Compares the given scalar with each element of the given tensor and returns the biggest of the two.
+  """
+  @spec max(number, %Tensor{}) :: %Tensor{}
   def max(s, x = %Tensor{}) when is_number(s) do
     fn i -> max(s, i) end
     |> t_apply(x)
   end
 
+  @doc """
+  Compares each element of the two given tensors element-wise and returns the biggest value.
+  """
+  @spec max(%Tensor{}, %Tensor{}) :: %Tensor{}
   def max(x = %Tensor{}, y = %Tensor{}) do
     fn i, j -> max(i, j) end
     |> t_apply(x, y)
   end
 
+  @doc """
+  Falls back to Elixir's default `max` function.
+  """
   def max(first, second) do
     Kernel.max(first, second)
   end
 
+  @doc """
+  Calculates the sum of all the elements in the given tensor.
+  """
+  @spec sum(%Tensor{}) :: number
   def sum(x) do
     x.items
     |> List.flatten()
     |> Enum.sum()
   end
 
-  Enum.each([:exp, :log, :tanh], fn fun ->
+  Enum.each([:exp, :log, :sqrt, :tanh], fn fun ->
+    @doc """
+    Returns the `#{fun}` of the given tensor element-wise.
+    """
     def unquote(:"#{fun}")(x) do
       fn i -> apply(:math, unquote(fun), [i]) end
       |> t_apply(x)
@@ -60,43 +86,69 @@ defmodule Numerix.Tensor do
   end)
 
   Enum.each([:+, :-, :abs], fn op ->
+    @doc """
+    Returns the result of applying `#{op}` to the given tensor element-wise.
+    """
     def unquote(:"#{op}")(x = %Tensor{}) do
       fn i -> apply(Kernel, unquote(op), [i]) end
       |> t_apply(x)
     end
 
+    @doc """
+    Falls back to Elixir's default `#{op}/1` function.
+    """
     def unquote(:"#{op}")(x) do
       apply(Kernel, unquote(op), [x])
     end
   end)
 
   Enum.each([:+, :-, :*, :/], fn op ->
+    @doc """
+    Returns the result of applying `#{op}` to the given tensor and scalar element-wise.
+    """
     def unquote(:"#{op}")(x = %Tensor{}, s) when is_number(s) do
       fn i -> apply(Kernel, unquote(op), [i, s]) end
       |> t_apply(x)
     end
 
+    @doc """
+    Returns the result of applying `#{op}` to the given scalar and tensor element-wise.
+    """
     def unquote(:"#{op}")(s, x = %Tensor{}) when is_number(s) do
       fn i -> apply(Kernel, unquote(op), [s, i]) end
       |> t_apply(x)
     end
 
+    @doc """
+    Returns the result of applying `#{op}` to the given tensors element-wise.
+    """
     def unquote(:"#{op}")(x = %Tensor{}, y = %Tensor{}) do
       fn i, j -> apply(Kernel, unquote(op), [i, j]) end
       |> t_apply(x, y)
     end
 
+    @doc """
+    Falls back to Elixir's default `#{op}/2` function.
+    """
     def unquote(:"#{op}")(x, y) do
       apply(Kernel, unquote(op), [x, y])
     end
   end)
 
+  @doc """
+  Applies the given function to the tensor element-wise and returns the result as a new tensor.
+  """
+  @spec t_apply(fun(), %Tensor{}) :: %Tensor{}
   def t_apply(fun, x) do
     fun
     |> do_apply(x.items, x.dims)
     |> Tensor.new()
   end
 
+  @doc """
+  Applies the given function to the two tensors element-wise and returns the result as a new tensor.
+  """
+  @spec t_apply(fun(), %Tensor{}, %Tensor{}) :: %Tensor{}
   def t_apply(fun, x, y) do
     fun
     |> do_apply(x.items, y.items, x.dims)
