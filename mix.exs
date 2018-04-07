@@ -5,7 +5,8 @@ defmodule Numerix.Mixfile do
     [
       app: :numerix,
       name: "Numerix",
-      description: "A collection of useful mathematical functions in Elixir with a slant towards statistics, linear algebra and machine learning",
+      description:
+        "A collection of useful mathematical functions in Elixir with a slant towards statistics, linear algebra and machine learning",
       version: "0.5.0",
       elixir: "~> 1.5",
       source_url: "https://github.com/safwank/Numerix",
@@ -13,12 +14,12 @@ defmodule Numerix.Mixfile do
       package: package(),
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
-        "credo": :test,
+        credo: :test,
         "coveralls.html": :test,
-        "commit": :test
+        commit: :test
       ],
       aliases: [
-        "commit": ["dialyzer", "credo --strict", "coveralls.html --trace"]
+        commit: ["dialyzer", "credo --strict", "coveralls.html --trace"]
       ],
       default_task: "commit"
     ]
@@ -30,14 +31,15 @@ defmodule Numerix.Mixfile do
 
   defp deps do
     [
+      {:flow, "~> 0.13"},
       {:credo, "~> 0.9.0-rc8", only: [:dev, :test]},
       {:dialyxir, "~> 0.5", only: [:dev, :test]},
       {:excoveralls, "~> 0.8", only: :test},
       {:excheck, "~> 0.5", only: :test},
       {:triq, github: "triqng/triq", only: :test},
+      {:stream_data, "~> 0.4", only: :test},
       {:ex_doc, "~> 0.18", only: :dev},
-      {:earmark, "~> 1.2", only: :dev},
-      {:flow, "~> 0.13"}
+      {:earmark, "~> 1.2", only: :dev}
     ]
   end
 
@@ -45,7 +47,7 @@ defmodule Numerix.Mixfile do
     [
       maintainers: ["Safwan Kamarrudin"],
       licenses: ["MIT"],
-      links: %{github: "https://github.com/safwank/Numerix"},
+      links: %{github: "https://github.com/safwank/Numerix"}
     ]
   end
 end

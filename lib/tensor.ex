@@ -7,6 +7,8 @@ defmodule Numerix.Tensor do
 
   import Kernel, except: [+: 1, -: 1, abs: 1, +: 2, -: 2, *: 2, /: 2, max: 2]
 
+  @max_long_value 9_223_372_036_854_775_807
+
   defstruct items: [[[]]], dims: 1
 
   defmacro __using__(_opts) do
@@ -175,6 +177,8 @@ defmodule Numerix.Tensor do
 
   defp do_apply(fun, x, 0) do
     fun.(x)
+  rescue
+    ArithmeticError -> @max_long_value
   end
 
   defp do_apply(fun, items, dim) do
