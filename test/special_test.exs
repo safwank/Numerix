@@ -1,16 +1,17 @@
 defmodule Numerix.SpecialTest do
-  use ExUnit.Case, async: false
+  use ExUnit.Case, async: true
   use ExCheck
+
   import ListHelper
 
   alias Numerix.Special
 
-  test :logit_is_nil_when_p_is_invalid do
+  test "logit is nil when p is invalid" do
     refute Special.logit(-0.1)
     refute Special.logit(1.1)
   end
 
-  test :logit_is_correct_for_specific_examples do
+  test "logit is correct for specific examples" do
     [
       {0.000000, :negative_infinity},
       {0.000010, -11.512915464920228103874353849992239636376994324587},
@@ -27,7 +28,7 @@ defmodule Numerix.SpecialTest do
     end)
   end
 
-  property :logistic_is_the_inverse_of_logit do
+  property "logistic is the inverse of logit" do
     for_all x in int(0, 1000) do
       p = x / 1000
       logit = Special.logit(p)
@@ -40,10 +41,9 @@ defmodule Numerix.SpecialTest do
     end
   end
 
-  property :logistic_is_between_0_and_1 do
+  property "logistic is between 0 and 1" do
     for_all x in number() do
       Special.logistic(x) |> between?(0, 1)
     end
   end
-
 end

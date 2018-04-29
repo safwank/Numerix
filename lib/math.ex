@@ -8,10 +8,11 @@ defmodule Numerix.Math do
   """
   @spec nth_root(number, integer, float) :: float
   def nth_root(x, n, precision \\ 1.0e-5)
-  def nth_root(0.0, _n, _precision), do: 0.0
-  def nth_root(_x, 0, _precision), do: 0.0
+  def nth_root(x, _n, _precision) when x == 0, do: 0.0
+  def nth_root(_x, n, _precision) when n == 0, do: 0.0
+
   def nth_root(x, n, precision) do
-    f = fn(prev) -> ((n - 1) * prev + x / :math.pow(prev, (n - 1))) / n end
+    f = fn prev -> ((n - 1) * prev + x / :math.pow(prev, n - 1)) / n end
     fixed_point(f, x, precision, f.(x))
   end
 

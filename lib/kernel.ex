@@ -3,7 +3,7 @@ defmodule Numerix.Kernel do
   Functions used as kernel methods for classification, regression and clustering.
   """
 
-  import Numerix.LinearAlgebra
+  use Numerix.Tensor
 
   alias Numerix.Common
 
@@ -14,18 +14,18 @@ defmodule Numerix.Kernel do
   simple single-layer type of artificial neural network where
   the function acts as the activation function for the network.
   """
-  @spec rbf([number], [number], integer) :: Common.maybe_float
-  def rbf(vector1, vector2, gamma \\ 10) do
-    vector1
-    |> subtract(vector2)
-    |> Flow.from_enumerable
-    |> Flow.map(&:math.pow(&1, 2))
-    |> Enum.sum
-    |> to_sum(gamma)
+  @spec rbf(Common.vector(), Common.vector(), integer) :: Common.maybe_float()
+  def rbf(x, y, gamma \\ 10)
+
+  def rbf(x = %Tensor{}, y = %Tensor{}, gamma) do
+    p = pow(x - y, 2)
+    len = sum(p)
+    :math.exp(-gamma * len)
   end
 
-  defp to_sum(vec_length, gamma) do
-    :math.exp(-gamma * vec_length)
+  def rbf(vector1, vector2, gamma) do
+    x = Tensor.new(vector1)
+    y = Tensor.new(vector2)
+    rbf(x, y, gamma)
   end
-
 end

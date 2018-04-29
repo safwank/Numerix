@@ -1,11 +1,12 @@
 defmodule Numerix.WindowTest do
-  use ExUnit.Case, async: false
+  use ExUnit.Case, async: true
   use ExCheck
+
   import ListHelper
 
   alias Numerix.Window
 
-  test :gaussian_is_correct_for_specific_examples do
+  test "gaussian is correct for specific examples" do
     [
       {0.0, 1.0},
       {0.1, 0.99501247919268232},
@@ -17,12 +18,11 @@ defmodule Numerix.WindowTest do
     end)
   end
 
-  property :gaussian_is_between_0_and_1 do
+  property "gaussian is between 0 and 1" do
     for_all {width, sigma} in {number(), non_neg_integer()} do
       sigma = sigma / 100
 
       Window.gaussian(width, sigma) |> between?(0, 1)
     end
   end
-
 end

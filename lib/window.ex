@@ -13,5 +13,4 @@ defmodule Numerix.Window do
   def gaussian(width, sigma \\ 1.0) do
     :math.exp(-0.5 * :math.pow(width / sigma, 2))
   end
-
 end

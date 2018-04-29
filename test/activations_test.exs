@@ -1,5 +1,5 @@
 defmodule Numerix.ActivationsTest do
-  use ExUnit.Case, async: false
+  use ExUnit.Case, async: true
   use ExUnitProperties
 
   import Numerix.Activations

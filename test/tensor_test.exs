@@ -1,9 +1,8 @@
 defmodule Numerix.TensorTest do
-  use ExUnit.Case, async: false
+  use ExUnit.Case, async: true
   use Numerix.Tensor
 
   @test_list [0, 0.1, 0.5, 0.9, 1.0]
-  @ones Stream.repeatedly(fn -> 1.0 end) |> Enum.take(length(@test_list))
 
   describe "new/1" do
     test "raises an error when passed a non-numeric scalar" do

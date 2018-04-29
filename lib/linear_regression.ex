@@ -3,8 +3,11 @@ defmodule Numerix.LinearRegression do
   Linear regression functions.
   """
 
+  use Numerix.Tensor
+
   import Numerix.Statistics
-  alias Numerix.Correlation
+
+  alias Numerix.{Common, Correlation}
 
   @doc """
   Least squares best fit for points `{x, y}` to a line `y:x↦a+bx`
@@ -12,18 +15,25 @@ defmodule Numerix.LinearRegression do
 
   Returns a tuple containing the intercept `a` and slope `b`.
   """
-  @spec fit([number], [number]) :: {float, float}
-  def fit([], _), do: nil
-  def fit(_, []), do: nil
-  def fit(xs, ys) when length(xs) != length(ys), do: nil
-  def fit(xs, ys) do
-    x_mean = xs |> mean
-    y_mean = ys |> mean
-    variance = xs |> variance
-    covariance = xs |> covariance(ys)
+  @spec fit(Common.vector(), Common.vector()) :: {float, float}
+  def fit(%Tensor{items: []}, _), do: nil
+  def fit(_, %Tensor{items: []}), do: nil
+  def fit(%Tensor{items: x}, %Tensor{items: y}) when length(x) != length(y), do: nil
+
+  def fit(x = %Tensor{}, y = %Tensor{}) do
+    x_mean = mean(x.items)
+    y_mean = mean(y.items)
+    variance = variance(x.items)
+    covariance = covariance(x.items, y.items)
     slope = covariance / variance
-    intercept = y_mean - (slope * x_mean)
+    intercept = y_mean - slope * x_mean
     {intercept, slope}
+  end
+
+  def fit(xs, ys) do
+    x = Tensor.new(xs)
+    y = Tensor.new(ys)
+    fit(x, y)
   end
 
   @doc """
@@ -31,7 +41,7 @@ defmodule Numerix.LinearRegression do
   and a set of predictors and responses, i.e.
   it calculates `y` in `y:x↦a+bx`.
   """
-  @spec predict(number, [number], [number]) :: number
+  @spec predict(number, Common.vector(), Common.vector()) :: number
   def predict(x, xs, ys) do
     {intercept, slope} = fit(xs, ys)
     intercept + slope * x
@@ -46,7 +56,7 @@ defmodule Numerix.LinearRegression do
   a prediction that is worse than the mean and 1
   indicates a perfect prediction.
   """
-  @spec r_squared([number], [number]) :: float
+  @spec r_squared(Common.vector(), Common.vector()) :: float
   def r_squared(predicted, actual) do
     predicted
     |> Correlation.pearson(actual)
@@ -54,5 +64,5 @@ defmodule Numerix.LinearRegression do
   end
 
   defp squared(nil), do: nil
-  defp squared(correlation), do: correlation |> :math.pow(2)
+  defp squared(correlation), do: :math.pow(correlation, 2)
 end

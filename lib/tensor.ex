@@ -9,7 +9,7 @@ defmodule Numerix.Tensor do
 
   @max_long_value 9_223_372_036_854_775_807
 
-  defstruct items: [[[]]], dims: 1
+  defstruct items: [], dims: 1
 
   defmacro __using__(_opts) do
     quote do
@@ -28,12 +28,12 @@ defmodule Numerix.Tensor do
     %Tensor{items: x, dims: calculate_dims(x)}
   end
 
-  def new(_) do
-    raise "Tensor must be a numeric scalar, list or nested list"
+  def new(x) do
+    raise "Tensor must be a numeric scalar, list or nested list, but got #{inspect(x)} instead"
   end
 
   @doc """
-  Returns the biggest value in the given tensor.
+  Returns the biggest element in the given tensor.
   """
   @spec max(%Tensor{}) :: number
   def max(x = %Tensor{}) do
@@ -83,6 +83,16 @@ defmodule Numerix.Tensor do
     """
     def unquote(:"#{fun}")(x) do
       fn i -> apply(:math, unquote(fun), [i]) end
+      |> t_apply(x)
+    end
+  end)
+
+  Enum.each([:pow], fn fun ->
+    @doc """
+    Returns the result of applying `#{fun}` to the given tensor element-wise.
+    """
+    def unquote(:"#{fun}")(x = %Tensor{}, s) when is_number(s) do
+      fn i -> apply(:math, unquote(fun), [i, s]) end
       |> t_apply(x)
     end
   end)
@@ -182,7 +192,10 @@ defmodule Numerix.Tensor do
   end
 
   defp do_apply(fun, items, dim) do
-    for i <- items, do: do_apply(fun, i, dim - 1)
+    items
+    |> Flow.from_enumerable()
+    |> Flow.map(fn i -> do_apply(fun, i, dim - 1) end)
+    |> Enum.to_list()
   end
 
   defp do_apply(fun, x, y, 0) do
@@ -192,8 +205,10 @@ defmodule Numerix.Tensor do
   defp do_apply(fun, x, y, dim) do
     x
     |> Stream.zip(y)
-    |> Enum.map(fn {a, b} ->
+    |> Flow.from_enumerable()
+    |> Flow.map(fn {a, b} ->
       do_apply(fun, a, b, dim - 1)
     end)
+    |> Enum.to_list()
   end
 end

@@ -23,7 +23,7 @@ defmodule Numerix.Optimization do
     * `:elite_fraction` - the percentage of population that will form the elite group in each generation
     * `:iterations` - the maximum number of generations to evolve the solutions
   """
-  @spec genetic([Range.t], (([integer]) -> number), Keyword.t) :: [integer]
+  @spec genetic([Range.t()], ([integer] -> number), Keyword.t()) :: [integer]
   @lint [{Credo.Check.Refactor.Nesting, false}]
   def genetic(domain, cost_fun, opts \\ []) do
     merged_opts = Keyword.merge(@default_opts, opts)
@@ -31,11 +31,12 @@ defmodule Numerix.Optimization do
     population = init_population(domain, merged_opts[:population_size])
 
     evolve = fn
-      ([best | _rest], 0, _fun) ->
+      [best | _rest], 0, _fun ->
         best
-      (pop, iteration, fun) ->
+
+      pop, iteration, fun ->
         Stream.repeatedly(fn ->
-          if :rand.uniform < merged_opts[:mutation_prob] do
+          if :rand.uniform() < merged_opts[:mutation_prob] do
             pop |> mutate(domain, top_elite)
           else
             pop |> crossover(top_elite)
@@ -43,8 +44,8 @@ defmodule Numerix.Optimization do
         end)
         |> Stream.take(merged_opts[:population_size])
         |> Stream.concat(pop |> Enum.take(top_elite))
-        |> Stream.map(& {cost_fun.(&1), &1})
-        |> Enum.sort
+        |> Stream.map(&{cost_fun.(&1), &1})
+        |> Enum.sort()
         |> Enum.map(fn {_cost, solution} -> solution end)
         |> fun.(iteration - 1, fun)
     end
@@ -53,14 +54,14 @@ defmodule Numerix.Optimization do
   end
 
   defp init_population(domain, size) do
-    Stream.repeatedly(fn -> domain |> Enum.map(&Enum.random/1) end)
+    Stream.repeatedly(fn -> Enum.map(domain, &Enum.random/1) end)
     |> Enum.take(size)
   end
 
   defp crossover(population, top_elite) do
-    vector1 = population |> Enum.at(0..top_elite |> Enum.random)
-    vector2 = population |> Enum.at(0..top_elite |> Enum.random)
-    idx = vector1 |> random_index
+    vector1 = population |> Enum.at(Enum.random(0..top_elite))
+    vector2 = population |> Enum.at(Enum.random(0..top_elite))
+    idx = random_index(vector1)
 
     vector1
     |> Enum.take(idx)
@@ -68,32 +69,35 @@ defmodule Numerix.Optimization do
   end
 
   defp mutate(population, domain, top_elite) do
-    elite_idx = 0..top_elite |> Enum.random
+    elite_idx = Enum.random(0..top_elite)
     target_vector = population |> Enum.at(elite_idx)
-    target_idx = target_vector |> random_index
+    target_idx = random_index(target_vector)
 
     target_vector
-    |> Stream.with_index
-    |> Stream.map(& do_mutate(&1, target_idx, domain))
-    |> Enum.to_list
+    |> Stream.with_index()
+    |> Stream.map(&do_mutate(&1, target_idx, domain))
+    |> Enum.to_list()
   end
 
   defp do_mutate({x, i}, target_idx, domain) when i == target_idx do
-    {min, max} = domain |> Enum.at(i) |> Enum.min_max
+    {min, max} = domain |> Enum.at(i) |> Enum.min_max()
 
     cond do
-      :rand.uniform < 0.5 and x > min ->
+      :rand.uniform() < 0.5 and x > min ->
         x - 1
+
       x < max ->
         x + 1
+
       true ->
         x
     end
   end
+
   defp do_mutate({x, _i}, _target_idx, _domain), do: x
 
   defp random_index(vector) do
     max = Enum.count(vector) - 1
-    0..max |> Enum.random
+    Enum.random(0..max)
   end
 end

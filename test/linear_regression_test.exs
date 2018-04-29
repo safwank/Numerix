@@ -1,5 +1,5 @@
 defmodule Numerix.LinearRegressionTest do
-  use ExUnit.Case, async: false
+  use ExUnit.Case, async: true
   use ExCheck
 
   import ListHelper
