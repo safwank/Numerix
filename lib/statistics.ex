@@ -58,9 +58,8 @@ defmodule Numerix.Statistics do
 
       _ ->
         counts
-        |> Flow.from_enumerable()
-        |> Flow.filter_map(fn {_x, count} -> count == max_count end, fn {i, _count} -> i end)
-        |> Enum.to_list()
+        |> Stream.filter(fn {_x, count} -> count == max_count end)
+        |> Enum.map(fn {i, _count} -> i end)
     end
   end
 

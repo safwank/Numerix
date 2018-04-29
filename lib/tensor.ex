@@ -193,9 +193,11 @@ defmodule Numerix.Tensor do
 
   defp do_apply(fun, items, dim) do
     items
+    |> Enum.with_index()
     |> Flow.from_enumerable()
-    |> Flow.map(fn i -> do_apply(fun, i, dim - 1) end)
-    |> Enum.to_list()
+    |> Flow.map(fn {a, i} -> {i, do_apply(fun, a, dim - 1)} end)
+    |> Enum.sort()
+    |> Keyword.values()
   end
 
   defp do_apply(fun, x, y, 0) do
@@ -205,10 +207,12 @@ defmodule Numerix.Tensor do
   defp do_apply(fun, x, y, dim) do
     x
     |> Stream.zip(y)
+    |> Stream.with_index()
     |> Flow.from_enumerable()
-    |> Flow.map(fn {a, b} ->
-      do_apply(fun, a, b, dim - 1)
+    |> Flow.map(fn {{a, b}, i} ->
+      {i, do_apply(fun, a, b, dim - 1)}
     end)
-    |> Enum.to_list()
+    |> Enum.sort()
+    |> Keyword.values()
   end
 end
