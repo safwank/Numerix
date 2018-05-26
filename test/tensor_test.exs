@@ -18,30 +18,35 @@ defmodule Numerix.TensorTest do
     end
 
     test "creates a scalar" do
-      assert Tensor.new(42) == %Tensor{items: 42, dims: 0}
+      assert Tensor.new(42) == %Tensor{items: 42, dims: 0, shape: {}}
     end
 
     test "creates a vector" do
-      assert Tensor.new(@test_list) == %Tensor{items: @test_list, dims: 1}
+      assert Tensor.new(@test_list) == %Tensor{items: @test_list, dims: 1, shape: {5}}
     end
 
     test "creates a matrix" do
-      assert Tensor.new([@test_list]) == %Tensor{items: [@test_list], dims: 2}
+      assert Tensor.new([@test_list]) == %Tensor{items: [@test_list], dims: 2, shape: {1, 5}}
     end
 
     test "creates a 3D tensor" do
-      assert Tensor.new([[@test_list]]) == %Tensor{items: [[@test_list]], dims: 3}
+      assert Tensor.new([[@test_list]]) == %Tensor{
+               items: [[@test_list]],
+               dims: 3,
+               shape: {1, 1, 5}
+             }
     end
 
     test "creates a complex 3D tensor" do
       assert Tensor.new([[@test_list, @test_list]]) == %Tensor{
                items: [[@test_list, @test_list]],
-               dims: 3
+               dims: 3,
+               shape: {1, 2, 5}
              }
     end
 
     test "creates an empty 3D tensor" do
-      assert Tensor.new([[[]]]) == %Tensor{items: [[[]]], dims: 3}
+      assert Tensor.new([[[]]]) == %Tensor{items: [[[]]], dims: 3, shape: {1, 1, 0}}
     end
   end
 

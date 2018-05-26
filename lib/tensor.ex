@@ -37,7 +37,7 @@ defmodule Numerix.Tensor do
 
   @max_long_value 9_223_372_036_854_775_807
 
-  defstruct items: [], dims: 1
+  defstruct items: [], dims: 1, shape: {0}
 
   defmacro __using__(_opts) do
     quote do
@@ -53,7 +53,8 @@ defmodule Numerix.Tensor do
   """
   @spec new(number | [number]) :: %Tensor{} | no_return()
   def new(x) when is_number(x) or is_list(x) do
-    %Tensor{items: x, dims: calculate_dims(x)}
+    shape = x |> calculate_shape |> Enum.reverse()
+    %Tensor{items: x, dims: Enum.count(shape), shape: List.to_tuple(shape)}
   end
 
   def new(x) do
@@ -189,21 +190,19 @@ defmodule Numerix.Tensor do
     |> Tensor.new()
   end
 
-  defp calculate_dims(x, dims \\ 0)
+  defp calculate_shape(x, shape \\ [])
+  defp calculate_shape(x, shape) when is_number(x), do: shape
+  defp calculate_shape([], shape), do: [0 | shape]
 
-  defp calculate_dims(scalar, dims) when is_number(scalar) do
-    dims
+  defp calculate_shape(x = [y | _], shape) when is_number(y) do
+    [Enum.count(x) | shape]
   end
 
-  defp calculate_dims([], dims) do
-    dims + 1
+  defp calculate_shape(x = [y | _], shape) do
+    calculate_shape(y, [Enum.count(x) | shape])
   end
 
-  defp calculate_dims([x | _], dims) do
-    calculate_dims(x, dims + 1)
-  end
-
-  defp calculate_dims(_, _) do
+  defp calculate_shape(_, _) do
     raise "Tensor must be a numeric scalar, list or nested list"
   end
 
