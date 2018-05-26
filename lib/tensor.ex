@@ -1,6 +1,34 @@
 defmodule Numerix.Tensor do
   @moduledoc """
   Defines a data structure for a tensor and its operations.
+
+  You can construct a `Tensor` by calling `Tensor.new/1` and passing it a list, or a list of lists, or a list of lists of...you get the idea.
+
+  Example
+
+    use Numerix.Tensor
+
+    x = Tensor.new([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+
+  Once you have a `Tensor` (or three), you can then use it in normal math operations, e.g. elementwise matrix operations.
+
+  Example
+
+    x = Tensor.new([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+    y = Tensor.new([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+    assert x / y == Tensor.new([[1, 1, 1], [1, 1, 1], [1, 1, 1]])
+
+  As it turns out, this is very handy when you need to implement complex math formulae as the code looks more like math functions than noisy code with a bunch of calls to `Enum.map/2`, `Enum.zip/2` and the like.
+
+  Example
+
+    x = Tensor.new([[0, 0.1, 0.5, 0.9, 1.0]])
+    m = max(x)
+    e = exp(x - m)
+    s = sum(e)
+    assert e / s == Tensor.new([[0.1119598021340303, 0.12373471731203411, 0.18459050724175335, 0.2753766776533774, 0.30433829565880477]])
+
+  Oh, I should also mention that this API uses `Flow` to parallelize independent pieces of computation to speed things up! Depending on the type of calculations you're doing, the bigger the data and the more cores you have, the faster it gets.
   """
 
   alias Numerix.Tensor
@@ -196,8 +224,7 @@ defmodule Numerix.Tensor do
     |> Enum.with_index()
     |> Flow.from_enumerable()
     |> Flow.map(fn {a, i} -> {i, do_apply(fun, a, dim - 1)} end)
-    |> Enum.sort()
-    |> Keyword.values()
+    |> to_ordered_values()
   end
 
   defp do_apply(fun, x, y, 0) do
@@ -212,7 +239,13 @@ defmodule Numerix.Tensor do
     |> Flow.map(fn {{a, b}, i} ->
       {i, do_apply(fun, a, b, dim - 1)}
     end)
-    |> Enum.sort()
+    |> to_ordered_values()
+  end
+
+  defp to_ordered_values(flow) do
+    flow
+    |> Enum.to_list()
+    |> List.keysort(0)
     |> Keyword.values()
   end
 end

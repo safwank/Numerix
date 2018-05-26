@@ -10,7 +10,7 @@ Add `numerix` to your list of dependencies in `mix.exs`:
 
 ```elixir
   def deps do
-    [{:numerix, "~> 0.4"}]
+    [{:numerix, "~> 0.5"}]
   end
 ```
 
@@ -31,6 +31,10 @@ Check out the [tests](https://github.com/safwank/Numerix/tree/master/test) for e
 Check out the [API reference](https://hexdocs.pm/numerix/api-reference.html) for the latest documentation.
 
 ## Features
+
+### Tensor API
+
+Numerix now includes a Tensor API that lets you implement complex math functions with little code, similar to what you get from `numpy`. And since this is written in Elixir, it uses `Flow` to parallelize independent pieces of computation to speed things up! Depending on the type of calculations you're doing, the bigger the data and the more cores you have, the faster it gets.
 
 ### Statistics
 
@@ -101,3 +105,12 @@ Check out the [API reference](https://hexdocs.pm/numerix/api-reference.html) for
 ### Optimization
 
 * Genetic algorithms
+
+### Neural network activation functions
+
+* softmax
+* softplus
+* softsign
+* sigmoid
+* ReLU, leaky ReLU, ELU and SELU
+* tanh
