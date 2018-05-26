@@ -6,27 +6,27 @@ defmodule Numerix.Tensor do
 
   Example
 
-    use Numerix.Tensor
+      use Numerix.Tensor
 
-    x = Tensor.new([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+      x = Tensor.new([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
 
   Once you have a `Tensor` (or three), you can then use it in normal math operations, e.g. elementwise matrix operations.
 
   Example
 
-    x = Tensor.new([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-    y = Tensor.new([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-    assert x / y == Tensor.new([[1, 1, 1], [1, 1, 1], [1, 1, 1]])
+      x = Tensor.new([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+      y = Tensor.new([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+      assert x / y == Tensor.new([[1, 1, 1], [1, 1, 1], [1, 1, 1]])
 
   As it turns out, this is very handy when you need to implement complex math formulae as the code looks more like math functions than noisy code with a bunch of calls to `Enum.map/2`, `Enum.zip/2` and the like.
 
   Example
 
-    x = Tensor.new([[0, 0.1, 0.5, 0.9, 1.0]])
-    m = max(x)
-    e = exp(x - m)
-    s = sum(e)
-    assert e / s == Tensor.new([[0.1119598021340303, 0.12373471731203411, 0.18459050724175335, 0.2753766776533774, 0.30433829565880477]])
+      x = Tensor.new([[0, 0.1, 0.5, 0.9, 1.0]])
+      m = max(x)
+      e = exp(x - m)
+      s = sum(e)
+      assert e / s == Tensor.new([[0.1119598021340303, 0.12373471731203411, 0.18459050724175335, 0.2753766776533774, 0.30433829565880477]])
 
   Oh, I should also mention that this API uses `Flow` to parallelize independent pieces of computation to speed things up! Depending on the type of calculations you're doing, the bigger the data and the more cores you have, the faster it gets.
   """
@@ -88,10 +88,8 @@ defmodule Numerix.Tensor do
     |> t_apply(x, y)
   end
 
-  @doc """
-  Falls back to Elixir's default `max` function.
-  """
   def max(first, second) do
+    # Falls back to Elixir's default `max` function.
     Kernel.max(first, second)
   end
 
@@ -134,10 +132,8 @@ defmodule Numerix.Tensor do
       |> t_apply(x)
     end
 
-    @doc """
-    Falls back to Elixir's default `#{op}/1` function.
-    """
     def unquote(:"#{op}")(x) do
+      # Falls back to Elixir's default `#{op}/1` function.
       apply(Kernel, unquote(op), [x])
     end
   end)
@@ -167,10 +163,8 @@ defmodule Numerix.Tensor do
       |> t_apply(x, y)
     end
 
-    @doc """
-    Falls back to Elixir's default `#{op}/2` function.
-    """
     def unquote(:"#{op}")(x, y) do
+      # Falls back to Elixir's default `#{op}/2` function.
       apply(Kernel, unquote(op), [x, y])
     end
   end)
