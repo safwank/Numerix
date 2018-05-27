@@ -52,9 +52,13 @@ defmodule Numerix.Tensor do
   Creates a new tensor from the given scalar, list or nested list.
   """
   @spec new(number | [number]) :: %Tensor{} | no_return()
-  def new(x) when is_number(x) or is_list(x) do
+  def new(x) when is_number(x) do
+    %Tensor{items: x, dims: 0, shape: {}}
+  end
+
+  def new(x) when is_list(x) do
     shape = x |> calculate_shape |> Enum.reverse()
-    %Tensor{items: x, dims: Enum.count(shape), shape: List.to_tuple(shape)}
+    %Tensor{items: x, dims: length(shape), shape: List.to_tuple(shape)}
   end
 
   def new(x) do
@@ -191,7 +195,6 @@ defmodule Numerix.Tensor do
   end
 
   defp calculate_shape(x, shape \\ [])
-  defp calculate_shape(x, shape) when is_number(x), do: shape
   defp calculate_shape([], shape), do: [0 | shape]
 
   defp calculate_shape(x = [y | _], shape) when is_number(y) do
@@ -199,6 +202,15 @@ defmodule Numerix.Tensor do
   end
 
   defp calculate_shape(x = [y | _], shape) do
+    # credo:disable-for-next-line
+    Enum.reduce(x, fn curr, prev ->
+      if length(curr) != length(prev) do
+        raise "Unexpected tensor shape, make sure every dimension has consistent lengths"
+      end
+
+      curr
+    end)
+
     calculate_shape(y, [length(x) | shape])
   end
 

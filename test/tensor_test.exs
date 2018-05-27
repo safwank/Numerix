@@ -17,6 +17,12 @@ defmodule Numerix.TensorTest do
       end
     end
 
+    test "raises an error when nested lists are not of the same shape" do
+      assert_raise RuntimeError, fn ->
+        Tensor.new([[[1, 2], [3, 4, 6], [7]]])
+      end
+    end
+
     test "creates a scalar" do
       assert Tensor.new(42) == %Tensor{items: 42, dims: 0, shape: {}}
     end
