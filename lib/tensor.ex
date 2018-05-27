@@ -195,11 +195,11 @@ defmodule Numerix.Tensor do
   defp calculate_shape([], shape), do: [0 | shape]
 
   defp calculate_shape(x = [y | _], shape) when is_number(y) do
-    [Enum.count(x) | shape]
+    [length(x) | shape]
   end
 
   defp calculate_shape(x = [y | _], shape) do
-    calculate_shape(y, [Enum.count(x) | shape])
+    calculate_shape(y, [length(x) | shape])
   end
 
   defp calculate_shape(_, _) do
