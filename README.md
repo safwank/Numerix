@@ -34,7 +34,9 @@ Check out the [API reference](https://hexdocs.pm/numerix/api-reference.html) for
 
 ### Tensor API
 
-Numerix now includes a Tensor API that lets you implement complex math functions with little code, similar to what you get from `numpy`. And since this is written in Elixir, it uses `Flow` to parallelize independent pieces of computation to speed things up! Depending on the type of calculations you're doing, the bigger the data and the more cores you have, the faster it gets.
+Numerix now includes a [Tensor API](https://hexdocs.pm/numerix/Numerix.Tensor.html) that lets you implement complex math functions with little code, similar to what you get from `numpy`. And since Numerix is written in Elixir, it uses `Flow` to run independent pieces of computation in parallel to speed things up. Depending on the type of calculations you're doing, the bigger the data and the more cores you have, the faster it gets.
+
+NOTE: Parallelization can only get you so far. In terms of raw speed, a pure Elixir solution will always be much slower compared to one that leverages low-level routines like BLAS or similar.
 
 ### Statistics
 
