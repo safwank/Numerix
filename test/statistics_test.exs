@@ -338,4 +338,51 @@ defmodule Numerix.StatisticsTest do
 
     assert_in_delta(Statistics.weighted_mean(xs, weights), 5.175, 0.001)
   end
+
+  describe "rolling mean from pandas examples: " do
+    test "example 1" do
+      assert Statistics.rolling_mean([1, 2, 3, 4], 2) |> Enum.to_list() == [0.0, 1.5, 2.5, 3.5]
+    end
+
+    test "example 2" do
+      assert Statistics.rolling_mean([1, 2, 3, 4], 3) |> Enum.to_list() == [0.0, 0.0, 2.0, 3.0]
+    end
+
+    test "example 3" do
+      assert Statistics.rolling_mean([1, 2, 3, 4, 5, 6, 7, 8, 9], 4) == [
+               0.0,
+               0.0,
+               0.0,
+               2.5,
+               3.5,
+               4.5,
+               5.5,
+               6.5,
+               7.5
+             ]
+    end
+  end
+
+  test "cumulative_sum/1" do
+    assert Statistics.cumulative_sum([10, 20, 30, 50]) == [10, 30, 60, 110]
+  end
+
+  describe "hypotenuse from numpy results: " do
+    test "example 1" do
+      assert Statistics.hypotenuse([1, 2, 3], [1, 2, 3], 8) == [
+               1.41421356,
+               2.82842712,
+               4.24264069
+             ]
+    end
+
+    test "example 2" do
+      assert Statistics.hypotenuse([57435, 53485, 87654], [87, 4321, 8765], 8) ==
+               [
+                 57435.06589184,
+                 53659.26076643,
+                 88091.13996878
+               ]
+    end
+  end
 end
