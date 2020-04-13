@@ -1,6 +1,6 @@
 defmodule Numerix.WindowTest do
   use ExUnit.Case, async: true
-  use ExCheck
+  use ExUnitProperties
 
   import ListHelper
 
@@ -19,10 +19,12 @@ defmodule Numerix.WindowTest do
   end
 
   property "gaussian is between 0 and 1" do
-    for_all {width, sigma} in {number(), non_neg_integer()} do
-      sigma = sigma / 100
-
-      Window.gaussian(width, sigma) |> between?(0, 1)
+    check all(
+            width <- float(),
+            sigma <- float(),
+            sigma = abs(sigma)
+          ) do
+      assert Window.gaussian(width, sigma) |> between?(0, 1)
     end
   end
 end

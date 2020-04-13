@@ -3,7 +3,7 @@ defmodule Numerix.DistanceTest do
   use ExCheck
   import ListHelper
 
-  alias Numerix.{Distance, Correlation}
+  alias Numerix.{Correlation, Distance}
 
   test "MSE is correct for a specific example" do
     vector1 = [12, 15, 20, 22, 24]

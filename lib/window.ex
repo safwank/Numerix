@@ -10,7 +10,10 @@ defmodule Numerix.Window do
   width (distance) and sigma (standard deviation).
   """
   @spec gaussian(number, number) :: float
-  def gaussian(width, sigma \\ 1.0) do
+  def gaussian(width, sigma \\ 1.0)
+  def gaussian(_width, sigma) when sigma == 0, do: 0.0
+
+  def gaussian(width, sigma) do
     :math.exp(-0.5 * :math.pow(width / sigma, 2))
   end
 end
