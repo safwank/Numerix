@@ -29,7 +29,7 @@ defmodule Numerix.CorrelationTest do
     end
 
     property "is one when the vectors are equal and variance is not zero" do
-      check all(xs <- uniq_list_of(integer(), min_length: 2)) do
+      check all(xs <- uniq_list_of(integer(), min_length: 2, max_tries: 20)) do
         assert Correlation.pearson(xs, xs) == 1.0
       end
     end
