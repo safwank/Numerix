@@ -35,8 +35,6 @@ defmodule Numerix.Mixfile do
       {:credo, "~> 1.3.0", only: [:dev, :test]},
       {:dialyxir, "~> 1.0.0", only: [:dev, :test]},
       {:excoveralls, "~> 0.12.0", only: :test},
-      {:excheck, "~> 0.6.0", only: :test},
-      {:triq, "~> 1.3", only: :test},
       {:stream_data, "~> 0.4.0", only: :test},
       {:ex_doc, "~> 0.21.0", only: :dev},
       {:earmark, "~> 1.4.0", only: :dev}

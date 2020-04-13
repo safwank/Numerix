@@ -1,19 +1,22 @@
 defmodule Numerix.OptimizationTest do
   use ExUnit.Case, async: true
-  use ExCheck
+  use ExUnitProperties
 
   import Numerix.Optimization
 
-  @tag iterations: 10
   property "genetic optimization returns the solution with the lowest cost" do
-    cost_fun = fn(xs) -> Enum.sum(xs) end
+    cost_fun = fn xs -> Enum.sum(xs) end
 
-    for_all {min, max, count} in such_that({min_, max_, _} in
-      {non_neg_integer(), non_neg_integer(), non_neg_integer()} when min_ < max_) do
+    check all(
+            numbers <- list_of(integer(0..255), min_length: 2),
+            min = Enum.min(numbers),
+            count = Enum.count(numbers),
+            max_runs: 10
+          ) do
+      domain = [numbers] |> Stream.cycle() |> Enum.take(count)
 
-      domain = [min..max] |> Stream.cycle |> Enum.take(count)
-
-      genetic(domain, cost_fun) == [min] |> Stream.cycle |> Enum.take(count)
+      assert genetic(domain, cost_fun, iterations: 1000) ==
+               [min] |> Stream.cycle() |> Enum.take(count)
     end
   end
 end
