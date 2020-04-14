@@ -121,6 +121,8 @@ defmodule Numerix.Distance do
     |> to_jaccard_distance
   end
 
+  defp to_jaccard_distance({_intersection, union}) when union == 0, do: 1.0
+
   defp to_jaccard_distance({intersection, union}) do
     1 - intersection / union
   end
