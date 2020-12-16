@@ -15,7 +15,7 @@ defmodule Numerix.LinearRegression do
 
   Returns a tuple containing the intercept `a` and slope `b`.
   """
-  @spec fit(Common.vector(), Common.vector()) :: {float, float}
+  @spec fit(Common.vector(), Common.vector()) :: {float, float} | nil
   def fit(%Tensor{items: []}, _), do: nil
   def fit(_, %Tensor{items: []}), do: nil
   def fit(%Tensor{items: x}, %Tensor{items: y}) when length(x) != length(y), do: nil
