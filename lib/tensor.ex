@@ -78,16 +78,12 @@ defmodule Numerix.Tensor do
   @doc """
   Compares the given scalar with each element of the given tensor and returns the biggest of the two.
   """
-  @spec max(number, %Tensor{}) :: %Tensor{}
+  @spec max(number | %Tensor{}, %Tensor{}) :: %Tensor{}
   def max(s, x = %Tensor{}) when is_number(s) do
     fn i -> max(s, i) end
     |> t_apply(x)
   end
 
-  @doc """
-  Compares each element of the two given tensors element-wise and returns the biggest value.
-  """
-  @spec max(%Tensor{}, %Tensor{}) :: %Tensor{}
   def max(x = %Tensor{}, y = %Tensor{}) do
     fn i, j -> max(i, j) end
     |> t_apply(x, y)
@@ -145,24 +141,20 @@ defmodule Numerix.Tensor do
 
   Enum.each([:+, :-, :*, :/], fn op ->
     @doc """
-    Returns the result of applying `#{op}` to the given tensor and scalar element-wise.
+    Returns the result of applying `#{op}` to the given tensor and/or scalar element-wise pair.
     """
     def unquote(:"#{op}")(x = %Tensor{}, s) when is_number(s) do
       fn i -> apply(Kernel, unquote(op), [i, s]) end
       |> t_apply(x)
     end
 
-    @doc """
-    Returns the result of applying `#{op}` to the given scalar and tensor element-wise.
-    """
+    # Returns the result of applying `#{op}` to the given scalar and tensor element-wise.
     def unquote(:"#{op}")(s, x = %Tensor{}) when is_number(s) do
       fn i -> apply(Kernel, unquote(op), [s, i]) end
       |> t_apply(x)
     end
 
-    @doc """
-    Returns the result of applying `#{op}` to the given tensors element-wise.
-    """
+    # Returns the result of applying `#{op}` to the given tensors element-wise.
     def unquote(:"#{op}")(x = %Tensor{}, y = %Tensor{}) do
       fn i, j -> apply(Kernel, unquote(op), [i, j]) end
       |> t_apply(x, y)
