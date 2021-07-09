@@ -321,4 +321,60 @@ defmodule Numerix.Statistics do
   defp do_quantile(xs, h, hf) do
     Enum.at(xs, hf - 1) + (h - hf) * (Enum.at(xs, hf) - Enum.at(xs, hf - 1))
   end
+
+  @doc """
+  Calculates rolling mean, prepending zeros for the values that don't
+  complete the minimum count of elements.
+  ## Examples
+
+    iex> Statistics.rolling_mean([2.8440000000000003, 3.096, 3.672, 4.572, 4.284], 2)
+    [0.0, 2.97, 3.3840000000000003, 4.122, 4.428]
+  """
+  def rolling_mean(collection, count) when is_list(collection) and is_integer(count) do
+    values_to_append = Enum.map(1..(count - 1), fn _ -> 0.0 end)
+
+    real_values =
+      rolling(collection, count)
+      |> Enum.map(&mean/1)
+
+    Enum.concat(values_to_append, real_values)
+  end
+
+  defp rolling(collection, count) do
+    Stream.chunk_every(collection, count, 1, :discard)
+  end
+
+  @doc """
+  Sums elements in an array cumulatively returning same number of elements provided.
+  ## Example
+    
+      iex> Statistics.cumulative_sum([10, 20, 30, 50])
+      [10, 30, 60, 110]
+  """
+  def cumulative_sum(values) when is_list(values) do
+    Enum.reduce(values, [0 | []], fn value, [hd | _tl] = acc ->
+      [value + hd | acc]
+    end)
+    |> Enum.reverse()
+    |> Enum.drop(1)
+  end
+
+  @doc """
+  Hypotenuse formula
+  ## Example
+    
+      iex> Statistics.hypotenuse([1, 2, 3], [1, 2, 3], 8) == [
+               1.41421356,
+               2.82842712,
+               4.24264069
+             ]
+  """
+  def hypotenuse(list_1, list_2, rounding_unit \\ 0)
+      when is_list(list_1) and is_list(list_2) and is_integer(rounding_unit) do
+    Enum.zip(list_1, list_2)
+    |> Enum.map(fn {x1, x2} ->
+      :math.sqrt(:math.pow(x1, 2) + :math.pow(x2, 2))
+      |> Float.round(rounding_unit)
+    end)
+  end
 end
